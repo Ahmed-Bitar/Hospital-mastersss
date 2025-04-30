@@ -1,0 +1,190 @@
+﻿@model MedicalPark.Models.MedicalRecord
+
+
+@{
+    ViewData["Title"] = "Create Medical Record";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+<<style>
+     body {
+         font-family: 'Poppins', sans-serif;
+         background: linear-gradient(90deg, #1a2a3b, #112233);
+         color: #ffffff;
+         padding: 0;
+         margin: 0;
+     }
+
+     h1 {
+         color: #00b0ff;
+         text-align: center;
+         margin-bottom: 20px;
+     }
+
+     .lead {
+         color: #81c7e0;
+         text-align: center;
+         margin-bottom: 30px;
+     }
+
+     .btn {
+         font-size: 18px;
+         font-weight: 600;
+         padding: 20px;
+         border-radius: 10px;
+         width: 100%;
+         text-align: center;
+         box-sizing: border-box;
+         transition: all 0.3s ease;
+     }
+
+     .btn-blue {
+         background-color: #005b8f;
+         color: #ffffff;
+     }
+
+         .btn-blue:hover {
+             background-color: #003f5f;
+             color: #ffffff;
+             transform: scale(1.05);
+         }
+
+     .header__userNav {
+         position: fixed;
+         top: 20px;
+         right: 20px;
+         z-index: 999;
+         display: flex;
+         align-items: center;
+         gap: 10px;
+     }
+
+     .header__userNavAvatar {
+         height: 40px;
+         width: 40px;
+         border-radius: 50%;
+         background-size: cover;
+         background-position: center;
+         border: 2px solid #005b8f;
+         cursor: pointer;
+     }
+
+     .dropdown-menu {
+         position: absolute;
+         top: 50px;
+         right: 0;
+         background-color: #1a2a3b;
+         border-radius: 5px;
+         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+         width: 200px;
+         display: none;
+         opacity: 0;
+         padding: 10px 0;
+         z-index: 1000;
+         transition: opacity 0.3s ease;
+     }
+
+         .dropdown-menu a,
+         .dropdown-menu button {
+             color: #ffffff;
+             font-weight: 500;
+             padding: 10px 20px;
+             display: block;
+             text-align: left;
+             transition: all 0.3s ease;
+             border: none;
+             background: none;
+             width: 100%;
+             text-decoration: none;
+         }
+
+             .dropdown-menu a:hover,
+             .dropdown-menu button:hover {
+                 background-color: #003f5f;
+             }
+
+         .dropdown-menu.show {
+             display: block;
+             opacity: 1;
+         }
+
+     .row .col-md-4 {
+         margin-bottom: 30px;
+     }
+
+     footer {
+         background-color: #0d1f2c;
+         color: #c4e1f5;
+         padding: 40px 0;
+         border-top: 4px solid #005b8f;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+     }
+
+         footer h5 {
+             font-size: 1.5rem;
+             margin-bottom: 1rem;
+             color: #00b0ff;
+             font-weight: 600;
+         }
+
+         footer ul {
+             padding: 0;
+             list-style: none;
+         }
+
+             footer ul li {
+                 margin-bottom: 10px;
+             }
+
+                 footer ul li a {
+                     color: #c4e1f5;
+                     text-decoration: none;
+                     font-weight: 400;
+                     transition: color 0.3s ease, transform 0.3s ease;
+                 }
+
+                     footer ul li a:hover {
+                         color: #00b0ff;
+                         transform: translateX(5px);
+                     }
+
+         footer .social-links a {
+             color: #c4e1f5;
+             margin: 0 10px;
+             font-size: 1.5rem;
+             transition: color 0.3s ease, transform 0.3s ease;
+         }
+
+             footer .social-links a:hover {
+                 color: #00b0ff;
+                 transform: scale(1.1);
+             }
+
+         footer .footer-copyright {
+             font-size: 0.9rem;
+             color: #c4e1f5;
+             margin-top: 30px;
+         }
+</style>
+
+
+<h2>Add Medical Record</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Select Prescriptions:</label>
+        @foreach (var prescription in ViewBag.Prescriptions)
+        {
+            <div>
+                <input type="checkbox" name="selectedPrescriptions" value="@prescription.Id" />
+                @prescription.MedicalsName
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+

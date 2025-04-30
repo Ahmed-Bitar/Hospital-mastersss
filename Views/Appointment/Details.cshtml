@@ -1,0 +1,73 @@
+﻿@model MedicalPark.Models.Appointment
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(90deg, #1a2a3b, #112233);
+        color: #fff;
+    }
+
+    h1 {
+        color: #00b0ff;
+        text-align: center;
+    }
+
+    .details-container {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    .details-item {
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+        .details-item strong {
+            color: #007bff;
+        }
+
+    .btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        text-align: center;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="details-container">
+    <h1>Appointment Details</h1>
+    <div class="details-item">
+        <strong>ID:</strong> @Model.Id
+    </div>
+    <div class="details-item">
+        <strong>Doctor:</strong> @Model.DoctorName
+    </div>
+    <div class="details-item">
+        <strong>Patient:</strong> @Model.PatientName
+    </div>
+    <div class="details-item">
+        <strong>Rendezvous Date:</strong> @Model.Rendezvous.ToString("yyyy-MM-dd HH:mm")
+    </div>
+    <div class="details-item">
+        <strong>Sickness:</strong> @Model.Sickness
+    </div>
+    <div class="details-item">
+        <strong>Created Date:</strong> @Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")
+    </div>
+    <div class="details-item">
+        <strong>Closed Date:</strong> @(Model.ClosedDate.HasValue ? Model.ClosedDate.Value.ToString("yyyy-MM-dd HH:mm") : "Not Closed")
+    </div>
+    <a asp-action="Index" class="btn">Back to List</a>
+</div>

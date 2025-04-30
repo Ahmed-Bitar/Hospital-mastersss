@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Verify Admin's Code";
+}
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(90deg, #1a2a3b, #112233);
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        color: #00b0ff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .lead {
+        color: #81c7e0;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .btn {
+        font-size: 18px;
+        font-weight: 600;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: block;
+    }
+
+    .btn-primary {
+        background-color: #005b8f;
+        color: #ffffff;
+    }
+
+        .btn-primary:hover {
+            background-color: #003f5f;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+</style>
+
+<div class="container">
+    <h1>Verify Admin's Code</h1>
+    <p class="text-center lead">Enter the verification codes sent to the admin's email</p>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <form id="verifyForm">
+                <div class="form-group">
+                    <label for="AdmineCode">Admin Verification Code</label>
+                    <input type="text" id="AdmineCode" name="AdmineCode" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="managerCode">Manager Verification Code</label>
+                    <input type="text" id="managerCode" name="managerCode" class="form-control" required />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Verify Codes</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#verifyForm').submit(function (e) {
+                e.preventDefault();
+
+                var AdmineCode = $('#AdmineCode').val();
+                var managerCode = $('#managerCode').val();
+
+                $.ajax({
+                    url: '@Url.Action("VerifyAdminCodes", "ManegmentAdmin")',
+                    type: 'POST',
+                    data: {
+                        AdmineCode: AdmineCode,
+                        managerCode: managerCode
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.href = response.redirectUrl;
+                        } else {
+                            alert(response.message || "Verification failed.");
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while verifying the code.');
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,265 @@
+﻿@model MedicalPark.Models.Report
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(90deg, #1a2a3b, #112233);
+        color: #ffffff;
+        padding: 0;
+        margin: 0;
+    }
+
+    h1 {
+        color: #00b0ff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .lead {
+        color: #81c7e0;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .btn {
+        font-size: 18px;
+        font-weight: 600;
+        padding: 20px;
+        border-radius: 10px;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+    }
+
+    .btn-blue {
+        background-color: #005b8f;
+        color: #ffffff;
+    }
+
+        .btn-blue:hover {
+            background-color: #003f5f;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+    .header__userNav {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header__userNavAvatar {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        border: 2px solid #005b8f;
+        cursor: pointer;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background-color: #1a2a3b;
+        border-radius: 5px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        width: 200px;
+        display: none;
+        opacity: 0;
+        padding: 10px 0;
+        z-index: 1000;
+        transition: opacity 0.3s ease;
+    }
+
+        .dropdown-menu a,
+        .dropdown-menu button {
+            color: #ffffff;
+            font-weight: 500;
+            padding: 10px 20px;
+            display: block;
+            text-align: left;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-decoration: none;
+        }
+
+            .dropdown-menu a:hover,
+            .dropdown-menu button:hover {
+                background-color: #003f5f;
+            }
+
+        .dropdown-menu.show {
+            display: block;
+            opacity: 1;
+        }
+
+    .row .col-md-4 {
+        margin-bottom: 30px;
+    }
+
+    footer {
+        background-color: #0d1f2c;
+        color: #c4e1f5;
+        padding: 40px 0;
+        border-top: 4px solid #005b8f;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+        footer h5 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00b0ff;
+            font-weight: 600;
+        }
+
+        footer ul {
+            padding: 0;
+            list-style: none;
+        }
+
+            footer ul li {
+                margin-bottom: 10px;
+            }
+
+                footer ul li a {
+                    color: #c4e1f5;
+                    text-decoration: none;
+                    font-weight: 400;
+                    transition: color 0.3s ease, transform 0.3s ease;
+                }
+
+                    footer ul li a:hover {
+                        color: #00b0ff;
+                        transform: translateX(5px);
+                    }
+
+        footer .social-links a {
+            color: #c4e1f5;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+            footer .social-links a:hover {
+                color: #00b0ff;
+                transform: scale(1.1);
+            }
+
+        footer .footer-copyright {
+            font-size: 0.9rem;
+            color: #c4e1f5;
+            margin-top: 30px;
+        }
+</style>
+<div class="container mt-5">
+    <h1 class="text-center">Edit Report</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="ReportTypes">Report Type:</label>
+            <select id="ReportTypes" name="ReportTypes" class="form-control">
+                <option value="@Report.ReportType.PatientReportType">Patient Report</option>
+                <option value="@Report.ReportType.StaffReportType">Staff Report</option>
+                <option value="@Report.ReportType.ManagementReportType">Management Report</option>
+                <option value="@Report.ReportType.EmergencyReportType">Emergency Report</option>
+                <option value="@Report.ReportType.VisitorReportType">Visitor Report</option>
+            </select>
+        </div>
+
+        <div id="patientReportTypes" class="form-group" style="display: none;">
+            <label for="PatientReport">Patient Report Type:</label>
+            <select id="PatientReport" name="PatientReport" class="form-control">
+                <option value="@Report.PatientReportType.MedicalError">Medical Error</option>
+                <option value="@Report.PatientReportType.PoorService">Poor Service</option>
+                <option value="@Report.PatientReportType.MedicineShortage">Medicine Shortage</option>
+                <option value="@Report.PatientReportType.AppointmentDelay">Appointment Delay</option>
+                <option value="@Report.PatientReportType.CleanlinessIssues">Cleanliness Issues</option>
+            </select>
+        </div>
+
+        <div id="staffReportTypes" class="form-group" style="display: none;">
+            <label for="StaffReport">Staff Report Type:</label>
+            <select id="StaffReport" name="StaffReport" class="form-control">
+                <option value="@Report.StaffReportType.WorkplaceIncidents">Workplace Incidents</option>
+                <option value="@Report.StaffReportType.EquipmentIssues">Equipment Issues</option>
+                <option value="@Report.StaffReportType.StaffShortage">Staff Shortage</option>
+            </select>
+        </div>
+
+        <div id="managementReportTypes" class="form-group" style="display: none;">
+            <label for="ManagementReport">Management Report Type:</label>
+            <select id="ManagementReport" name="ManagementReport" class="form-control">
+                <option value="@Report.ManagementReportType.InfrastructureProblems">Infrastructure Problems</option>
+                <option value="@Report.ManagementReportType.DataTampering">Data Tampering</option>
+                <option value="@Report.ManagementReportType.SecurityViolations">Security Violations</option>
+            </select>
+        </div>
+
+        <div id="emergencyReportTypes" class="form-group" style="display: none;">
+            <label for="EmergencyReport">Emergency Report Type:</label>
+            <select id="EmergencyReport" name="EmergencyReport" class="form-control">
+                <option value="@Report.EmergencyReportType.MassInjuries">Mass Injuries</option>
+                <option value="@Report.EmergencyReportType.EmergencyShortage">Emergency Shortage</option>
+            </select>
+        </div>
+
+        <div id="visitorReportTypes" class="form-group" style="display: none;">
+            <label for="VisitorReport">Visitor Report Type:</label>
+            <select id="VisitorReport" name="VisitorReport" class="form-control">
+                <option value="@Report.VisitorReportType.VisitorComplaints">Visitor Complaints</option>
+                <option value="@Report.VisitorReportType.VisitingHoursIssues">Visiting Hours Issues</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="Description">Description:</label>
+            <textarea id="Description" name="Description" class="form-control"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var reportTypeSelect = document.getElementById('ReportTypes');
+        var patientReportDiv = document.getElementById('patientReportTypes');
+        var staffReportDiv = document.getElementById('staffReportTypes');
+        var managementReportDiv = document.getElementById('managementReportTypes');
+        var emergencyReportDiv = document.getElementById('emergencyReportTypes');
+        var visitorReportDiv = document.getElementById('visitorReportTypes');
+
+        reportTypeSelect.addEventListener('change', function () {
+            patientReportDiv.style.display = 'none';
+            staffReportDiv.style.display = 'none';
+            managementReportDiv.style.display = 'none';
+            emergencyReportDiv.style.display = 'none';
+            visitorReportDiv.style.display = 'none';
+
+            if (reportTypeSelect.value == '@Report.ReportType.PatientReportType') {
+                patientReportDiv.style.display = 'block';
+            } else if (reportTypeSelect.value == '@Report.ReportType.StaffReportType') {
+                staffReportDiv.style.display = 'block';
+            } else if (reportTypeSelect.value == '@Report.ReportType.ManagementReportType') {
+                managementReportDiv.style.display = 'block';
+            } else if (reportTypeSelect.value == '@Report.ReportType.EmergencyReportType') {
+                emergencyReportDiv.style.display = 'block';
+            } else if (reportTypeSelect.value == '@Report.ReportType.VisitorReportType') {
+                visitorReportDiv.style.display = 'block';
+            }
+        });
+
+        reportTypeSelect.dispatchEvent(new Event('change'));
+    });
+</script>

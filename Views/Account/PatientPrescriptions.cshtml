@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MedicalPark.Models.Prescription>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(90deg, #1a2a3b, #112233);
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        color: #00b0ff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .lead {
+        color: #81c7e0;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .option-box {
+        background: linear-gradient(90deg, #005b8f, #1a2a3b);
+        border-radius: 15px;
+        padding: 20px;
+        color: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: block;
+    }
+
+        .option-box:hover {
+            background: linear-gradient(90deg, #003f5f, #112233);
+            transform: scale(1.05);
+            text-decoration: none;
+        }
+
+        .option-box i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 2px solid #00b0ff;
+            border-radius: 50%;
+            background-color: #ffffff;
+            color: #00b0ff;
+        }
+
+        .option-box h5 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .option-box p {
+            font-size: 1rem;
+            color: #c4e1f5;
+            margin: 0;
+        }
+</style>
+<h2> Prescriptions</h2>
+
+<table class="table table-bordered">
+    <th>Doctor Name</th>
+    <th>Patient Name</th>
+    <th>Medications</th>
+    <th>Date Created</th>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DoctorName</td>
+                <td>@item.PatientName</td>
+                <td>@item.MedicalsName</td>
+                <td>@item.CreatedDate.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

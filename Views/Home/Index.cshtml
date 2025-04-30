@@ -1,0 +1,361 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(90deg, #1f2f3f, #223344);
+    color: #ffffff;
+    padding: 0;
+    margin: 0;
+    }
+
+    h1 {
+    color: #00b0ff;
+    text-align: center;
+    margin-bottom: 20px;
+    }
+
+    .lead {
+    color: #81c7e0;
+    text-align: center;
+    margin-bottom: 30px;
+    }
+
+    .btn {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    }
+
+    .btn-blue {
+    background-color: #007acc;
+    color: #ffffff;
+    }
+
+    .btn-blue:hover {
+    background-color: #005f99;
+    color: #ffffff;
+    transform: scale(1.05);
+    }
+
+    .header__userNav {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+
+    .header__userNavAvatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #007acc;
+    cursor: pointer;
+    }
+
+    .dropdown-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: #1f2f3f;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    display: none;
+    opacity: 0;
+    padding: 10px 0;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+    }
+
+    .dropdown-menu a,
+    .dropdown-menu button {
+    color: #ffffff;
+    font-weight: 500;
+    padding: 10px 20px;
+    display: block;
+    text-align: left;
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-decoration: none;
+    }
+
+    .dropdown-menu a:hover,
+    .dropdown-menu button:hover {
+    background-color: #003f5f;
+    }
+
+    .dropdown-menu.show {
+    display: block;
+    opacity: 1;
+    }
+
+    .row .col-md-4 {
+    margin-bottom: 30px;
+    }
+
+    footer {
+    background-color: #0d1f2c;
+    color: #c4e1f5;
+    padding: 40px 0;
+    border-top: 4px solid #007acc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    footer h5 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #00b0ff;
+    font-weight: 600;
+    }
+
+    footer ul {
+    padding: 0;
+    list-style: none;
+    }
+
+    footer ul li {
+    margin-bottom: 10px;
+    }
+
+    footer ul li a {
+    color: #c4e1f5;
+    text-decoration: none;
+    font-weight: 400;
+    transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    footer ul li a:hover {
+    color: #00b0ff;
+    transform: translateX(5px);
+    }
+
+    footer .social-links a {
+    color: #c4e1f5;
+    margin: 0 10px;
+    font-size: 1.5rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    footer .social-links a:hover {
+    color: #00b0ff;
+    transform: scale(1.1);
+    }
+
+    footer .footer-copyright {
+    font-size: 0.9rem;
+    color: #c4e1f5;
+    margin-top: 30px;
+    }
+
+    .card-box {
+    background-color: #2a3b4c;
+    border: 2px solid #007acc;
+    border-radius: 15px;
+    padding: 20px;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    }
+
+    .card-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 176, 255, 0.4);
+    }
+
+    .card-box .icon-wrapper {
+    margin-bottom: 15px;
+    color: #00b0ff;
+    }
+
+    .card-box .content-wrapper h5 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    }
+
+    .card-box .content-wrapper p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #81c7e0;
+    }
+</style>
+
+<div class="header__userNav">
+    <div class="header__userNavAvatar"
+    style="background-image: url('https://i1.sndcdn.com/avatars-KMtQ3LE9rKqO6kTw-4SfugA-t120x120.jpg');"
+    aria-label="@User.Identity.Name’s avatar">
+    </div>
+    <div class="dropdown-menu">
+        <a asp-controller="Account" asp-action="Profile">Profile</a>
+        <a asp-controller="Account" asp-action="ProfileUpdate">Update Profile</a>
+        <form asp-controller="Account" asp-action="Logout" method="post" style="margin: 0;">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="text-center">
+        <h1>Welcome to MedicalPark</h1>
+        <p class="lead">Manage your hospital resources, doctors, patients, and more with ease!</p>
+    </div>
+    <div class="row text-center mt-4">
+        @if (User.IsInRole("Management") || User.IsInRole("Doctor") || User.IsInRole("AllRole"))
+        {
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="Prescriptions" asp-action="Index" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-file-prescription fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Prescriptions</h5>
+                        <p>Manage prescriptions</p>
+                    </div>
+                </a>
+            </div>
+        }
+
+        @if (User.IsInRole("Management") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("AllRole"))
+        {
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="MedicalRecords" asp-action="Index" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-notes-medical fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Medical Records</h5>
+                        <p>Access medical records</p>
+                    </div>
+                </a>
+            </div>
+        }
+
+        
+    </div>
+
+    <div class="row text-center mt-4">
+        @if (User.IsInRole("Hospital Manager") || User.IsInRole("AllRole"))
+
+        {
+
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="UserManegment" asp-action="Index" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-user-md fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>User Management</h5>
+                        <p>View and manage employees</p>
+                    </div>
+                </a>
+            </div>
+
+        }
+
+
+
+        @if (User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Admin") || User.IsInRole("AllRole"))
+        {
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="Appointment" asp-action="Index" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-calendar-alt fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Appointments</h5>
+                        <p>Schedule and view appointments</p>
+                    </div>
+                </a>
+            </div>
+        }
+
+
+        @if (User.IsInRole("Management") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse") || User.IsInRole("AllRole"))
+        {
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="Reports" asp-action="Index" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-flag fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Reports</h5>
+                        <p>Generate hospital reports</p>
+                    </div>
+                </a>
+            </div>
+
+            @if (User.IsInRole("Patient") || User.IsInRole("AllRole"))
+            {
+                <div class="col-md-4 col-sm-6 col-12">
+                    <a asp-controller="Account" asp-action="PatientManegment" class="card-box">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-notes-medical fa-2x"></i>
+                        </div>
+                        <div class="content-wrapper">
+                            <h5>Patient Manegment</h5>
+                            <p>View your prescriptions and diagnoses</p>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+
+</div>
+
+<footer class="footer">
+    <div class="container text-center">
+        <h5>Quick Links</h5>
+        <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+        </ul>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <div class="footer-copyright">
+            &copy; 2025 MedicalPark. All Rights Reserved.
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.querySelector('.header__userNavAvatar').addEventListener('click', function(event) {
+        event.stopPropagation();
+        var menu = document.querySelector('.dropdown-menu');
+        menu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function(event) {
+        var menu = document.querySelector('.dropdown-menu');
+        if (!menu.contains(event.target) && !event.target.closest('.header__userNavAvatar')) {
+            menu.classList.remove('show');
+        }
+    });
+</script>

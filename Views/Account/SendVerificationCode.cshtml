@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Send Verification Code";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">@ViewData["Title"]</h2>
+    <p class="text-center text-muted">Please enter your email address to receive a verification code.</p>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form id="verificationForm" method="post">
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-3">Send Verification Code</button>
+            </form>
+
+            <div id="responseMessage" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#verificationForm").submit(function (e) {
+                e.preventDefault(); 
+
+                var email = $("#email").val();
+
+                if (!email) {
+                    $("#responseMessage").html('<div class="alert alert-warning">Please enter a valid email address.</div>');
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("SendVerificationCode", "Account")',
+                    type: 'POST',
+                    data: { email: email },
+                    success: function (response) {
+                        if (response.success) {
+                            $("#responseMessage").html('<div class="alert alert-success">' + response.message + '</div>');
+
+                            if (response.redirectUrl) {
+                                setTimeout(function () {
+                                    window.location.href = response.redirectUrl;
+                                }, 2000); 
+                            }
+                        } else {
+                            $("#responseMessage").html('<div class="alert alert-danger">' + response.message + '</div>');
+                        }
+                    },
+                    error: function () {
+                        $("#responseMessage").html('<div class="alert alert-danger">An error occurred. Please try again later.</div>');
+                    }
+                });
+            });
+        });
+    </script>
+}

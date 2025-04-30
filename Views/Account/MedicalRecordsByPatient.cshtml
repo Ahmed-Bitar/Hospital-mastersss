@@ -1,0 +1,114 @@
+﻿@model IEnumerable<MedicalPark.Models.MedicalRecord>
+
+
+@{
+    ViewData["Title"] = "Medical Records";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(90deg, #1a2a3b, #112233);
+        color: #ffffff;
+    }
+
+    h1 {
+        color: #00b0ff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #005b8f;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: #003f5f;
+    }
+
+    .btn {
+        font-size: 16px;
+        font-weight: 600;
+        padding: 12px 20px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: white;
+        display: inline-block;
+        box-sizing: border-box;
+        background-color: transparent;
+    }
+
+        .btn:hover {
+            background-color: #005b8f;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    .btn-back {
+        background-color: #d9534f;
+    }
+
+        .btn-back:hover {
+            background-color: #c9302c;
+        }
+
+    .text-right {
+        text-align: right;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1>Medical Records for Patient</h1>
+
+    <div class="text-right mb-3">
+        <a href="@Url.Action("Index", "Patients")" class="btn btn-back">Back to Patients List</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Patient Name</th>
+                <th>Doctor Name</th>
+                <th>Medical Condition</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model)
+            {
+                <tr>
+                    <td>@record.Id</td>
+                    <td>@record.PationName</td>
+                    <td>@record.DoctorName</td>
+                    <td>@record.Medicals</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@record.Id" class="btn btn-edit">Details</a>
+                        <a asp-action="Edit" asp-route-id="@record.Id" class="btn btn-edit">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@record.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

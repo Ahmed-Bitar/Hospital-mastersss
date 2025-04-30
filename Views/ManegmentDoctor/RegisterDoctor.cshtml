@@ -1,0 +1,160 @@
+﻿@model MedicalPark.Models.DoctorRegisterViewModel
+
+
+@{
+    ViewData["Title"] = "Register Doctor";
+}
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(90deg, #1a2a3b, #112233);
+        color: #ffffff;
+        padding: 0;
+        margin: 0;
+    }
+
+    h1, h3 {
+        color: #00b0ff;
+        text-align: center;
+    }
+
+    .form-container {
+        background-color: #1e2d3b;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        padding: 30px;
+        width: 50%;
+        margin: 50px auto;
+        color: #ffffff;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            color: #00b0ff;
+        }
+
+    .form-control {
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 6px;
+        border: 1px solid #555;
+        background-color: #2a3b4c;
+        color: #ffffff;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+        .form-control:focus {
+            border-color: #00b0ff;
+            outline: none;
+            background-color: #334455;
+        }
+
+    .btn-blue {
+        background-color: #005c99;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 15px;
+        width: 100%;
+        border-radius: 6px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        border: none;
+    }
+
+        .btn-blue:hover {
+            background-color: #004080;
+            transform: scale(1.05);
+        }
+
+    i {
+        border: 2px solid #00b0ff;
+        border-radius: 50%;
+        padding: 10px;
+        background-color: #ffffff;
+        color: #00b0ff;
+        font-size: 30px;
+        display: block;
+        text-align: center;
+        margin: 0 auto 20px;
+    }
+
+    .lead {
+        color: #81c7e0;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+</style>
+
+<div class="form-container">
+    <i class="fas fa-user-md"></i>
+    <h3>Create Doctor Account</h3>
+    <p class="lead">Please fill out the form below to register a new doctor.</p>
+
+    <form asp-action="RegisterDoctor" method="post">
+        <div class="form-group">
+            <label asp-for="FullName">Full Name</label>
+            <input asp-for="FullName" class="form-control" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PhoneNumber">Phone Number</label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" class="form-control" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ConfirmPassword">Confirm Password</label>
+            <input asp-for="ConfirmPassword" class="form-control" type="password" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Gender">Gender</label>
+            <select asp-for="Gender" class="form-control">
+                <option value="">Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Specialty">Specialty</label>
+            <select asp-for="Specialty" class="form-control">
+                <option value="">Select Specialty</option>
+                @foreach (var specialty in Enum.GetValues(typeof(Doctor.DoctorSpecialty)))
+                {
+                    <option value="@specialty">@specialty</option>
+                }
+            </select>
+            <span asp-validation-for="Specialty" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Salary">Salary</label>
+            <input asp-for="Salary" class="form-control" />
+            <span asp-validation-for="Salary" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-blue">Register Doctor</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

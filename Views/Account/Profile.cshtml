@@ -1,0 +1,75 @@
+﻿@model ApplicationUser
+
+
+
+<div class="container profile-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header text-center">
+                    <h2>My Profile</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="profile-avatar" style="background-image: url('https://i1.sndcdn.com/avatars-KMtQ3LE9rKqO6kTw-4SfugA-t120x120.jpg');"></div>
+                        </div>
+                        <div class="col-md-8">
+                            <p><strong>Username:</strong> @Model.UserName</p>
+                            <p><strong>Name:</strong> @Model.Name</p>
+                            <p><strong>Email:</strong> @Model.Email</p>
+                            <p><strong>phone Number:</strong> @Model.PhoneNumber</p>
+                            <p><strong>User Type:</strong> @Model.UserType</p>
+                            <p><strong>Gender:</strong> @Model.Gender</p>
+
+
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-content {
+        margin-top: 50px;
+        background-color: #f4f4f4;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        border: 3px solid #fff;
+        margin-bottom: 15px;
+    }
+
+    .card {
+        background-color: #005b8f;
+    }
+
+    .card-header {
+        background-color: #003f5f;
+    }
+
+    .card-footer {
+        background-color: #003f5f;
+    }
+
+    .btn-light {
+        background-color: #ffffff;
+        color: #005b8f;
+        font-weight: 600;
+    }
+
+        .btn-light:hover {
+            background-color: #003f5f;
+            color: white;
+        }
+</style>
