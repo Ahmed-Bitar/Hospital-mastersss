@@ -1,0 +1,123 @@
+﻿@model MedicalPark.Models.Doctor
+
+@{
+    ViewData["Title"] = "Edit Doctor";
+}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(90deg, #1a2a3b, #112233);
+        color: #ffffff;
+    }
+
+    h1 {
+        color: #00b0ff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #005b8f;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: #003f5f;
+    }
+
+    .btn {
+        font-size: 16px;
+        font-weight: 600;
+        padding: 12px 20px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: white;
+        display: inline-block;
+        box-sizing: border-box;
+        background-color: transparent;
+    }
+
+        .btn:hover {
+            background-color: #005b8f;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    .btn-create {
+        background-color: #005b8f;
+    }
+
+        .btn-create:hover {
+            background-color: #003f5f;
+            transform: scale(1.05);
+        }
+
+    .text-right {
+        text-align: right;
+    }
+</style>
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">Edit Doctor Information</h2>
+    <form asp-action="EditDoctor" method="post">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Name" class="form-label">Full Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Gender" class="form-label">Gender</label>
+                <select asp-for="Gender" class="form-select">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Specialty" class="form-label">Specialty</label>
+                <select asp-for="Specialty" class="form-select"
+                        asp-items="Html.GetEnumSelectList<Doctor.DoctorSpecialty>()"></select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Salery" class="eorm-label">Salary</label>
+                <input asp-for="Salery" class="form-control" />
+                <span asp-validation-for="Salery" class="text-danger"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">Save Changes</button>
+        <a asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

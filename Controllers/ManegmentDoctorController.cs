@@ -1,4 +1,5 @@
 ﻿using System.Net.Mail;
+using System.Numerics;
 using MedicalPark.Dbcontext;
 using MedicalPark.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -57,10 +58,6 @@ namespace MedicalPark.Controllers
         [HttpPost]
         public async Task<IActionResult> SendVerificationCodeForDoctor(string email)
         {
-
-       
-
-
             if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
             {
                 return Json(new { success = false, message = "Invalid email address." });
@@ -144,7 +141,7 @@ namespace MedicalPark.Controllers
                                        .Cast<DoctorSpecialty>()
                                        .ToList();
 
-
+            ViewBag.email = TempData["Email"] as string;
             return View();
         }
 
@@ -153,20 +150,19 @@ namespace MedicalPark.Controllers
         [Authorize(Roles = "Hospital Manager")]
         public async Task<IActionResult> RegisterDoctor(DoctorRegisterViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
 
-                var emailsending = TempData["Email"] as string;
 
                 var user = new Doctor()
                 {
-                    Name = model.FullName,
-                    UserName = model.FullName.Replace(" ", ""),
-                    Email = emailsending,
+                    Name = model.Name,
+                    UserName = model.Name.Replace(" ", ""),
+                    Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     Gender = model.Gender,
                     Specialty = model.Specialty,
-                    Salery = model.Salary,
+                    Salery = model.Salery,
                     UserType = model.UserType,
                 };
 
@@ -195,72 +191,15 @@ namespace MedicalPark.Controllers
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-
-
-
-
-
-
             }
             return View(model);
 
         }
 
 
-
-
-
         [HttpGet]
         [Authorize(Roles = "Hospital Manager")]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var doctor = await _context.Doctors.FindAsync(id);
-            if (doctor == null)
-            {
-                return NotFound();
-            }
 
-            var doctorRegisterViewModel = new DoctorRegisterViewModel
-            {
-                FullName = doctor.Name,
-                Gender = doctor.Gender,
-                Specialty = doctor.Specialty,
-                Email = doctor.Email,
-                Salary = doctor.Salery,
-                PhoneNumber = doctor.PhoneNumber,
-                UserType = doctor.UserType,
-            };
-            return View(doctorRegisterViewModel);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Management")]
-        public async Task<IActionResult> Edit(int id, DoctorRegisterViewModel doctorRegisterViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var doctor = await _context.Doctors.FindAsync(id);
-                if (doctor == null)
-                {
-                    return NotFound();
-                }
-
-                doctor.Name = doctorRegisterViewModel.FullName;
-                doctor.Gender = doctorRegisterViewModel.Gender;
-                doctor.Specialty = doctorRegisterViewModel.Specialty;
-                doctor.Email = doctorRegisterViewModel.Email;
-                doctor.Salery = doctorRegisterViewModel.Salary;
-                doctor.PhoneNumber = doctorRegisterViewModel.PhoneNumber;
-
-                _context.Update(doctor);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "ManegmentDoctor");
-            }
-            return View(doctorRegisterViewModel);
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "Hospital Manager")]
         public async Task<IActionResult> Details(int id)
         {
             var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == id);
@@ -272,14 +211,15 @@ namespace MedicalPark.Controllers
             return View(doctor);
         }
 
+
         [HttpGet]
         [Authorize(Roles = "Hospital Manager")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> EditDoctor(int id)
         {
             var doctor = await _context.Doctors.FindAsync(id);
             if (doctor == null)
             {
-                return NotFound("Doctor not found.");
+                return NotFound();
             }
 
             return View(doctor);
@@ -287,20 +227,29 @@ namespace MedicalPark.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Hospital Manager")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> EditDoctor(int id, DoctorRegisterViewModel EditeDoctor)
         {
             var doctor = await _context.Doctors.FindAsync(id);
-            if (doctor == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound($"Doctor with ID {id} not found.");
+                doctor.Name = EditeDoctor.Name;
+                doctor.Gender = EditeDoctor.Gender;
+                doctor.Specialty = EditeDoctor.Specialty;
+                doctor.Email = EditeDoctor.Email;
+                doctor.Salery = EditeDoctor.Salery;
+                doctor.PhoneNumber = EditeDoctor.PhoneNumber;
+                doctor.UserType = "Doctor";
+
+                _context.Update(doctor);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "UserManegment");
+
             }
-
-            _context.Doctors.Remove(doctor);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index", "ManegmentDoctor");
-
+            return View(EditeDoctor);
         }
+
+      
+
 
 
         private string GenerateVerificationCodeEmployee()

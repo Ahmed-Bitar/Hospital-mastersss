@@ -9,7 +9,7 @@ namespace MedicalPark.Models
         [Required]
        
         [Display(Name = "Full Name")] 
-        public string FullName { get; set; }
+        public string Name { get; set; }
    
 
         [Required]

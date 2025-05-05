@@ -10,7 +10,7 @@ namespace MedicalPark.Models
 
         [Required]
         [Display(Name = "Full Name")]
-        public string FullName { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [EmailAddress]
@@ -28,7 +28,7 @@ namespace MedicalPark.Models
         public DoctorSpecialty Specialty { get; set; }
 
         [Required]
-        public int Salary { get; set; }
+        public int Salery { get; set; }
 
         [Display(Name = "User Type (Role)")]
         public required string UserType { get; set; } = "Doctor";

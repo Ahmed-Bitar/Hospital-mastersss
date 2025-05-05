@@ -81,17 +81,15 @@
         </form>
     </div>
 
-
     <table>
         <thead>
             <tr>
                 <th>ID</th>
-				<th>Username</th>
+                <th>Username</th>
                 <th>Full Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Role</th>
-
                 <th>Actions</th>
             </tr>
         </thead>
@@ -100,17 +98,34 @@
             {
                 <tr>
                     <td>@employee.Id</td>
-					<td>@employee.UserName</td>
+                    <td>@employee.UserName</td>
                     <td>@employee.Name</td>
                     <td>@employee.Email</td>
                     <td>@employee.PhoneNumber</td>
                     <td>@employee.UserType</td>
 
-
                     <td>
-                        <a asp-action="Edit" asp-route-id="@employee.Id" class="btn">Edit</a>
-                        <a asp-action="Details" asp-route-id="@employee.Id" class="btn">Details</a>
-                        <form asp-action="Delete" asp-route-id="@employee.Id" method="post" style="display:inline;">
+                        @if (employee.UserType == "Doctor")
+                        {
+                            <a asp-controller="ManegmentDoctor" asp-action="EditDoctor" asp-route-id="@employee.Id" class="btn">Edit Doctor</a>
+                            <a asp-controller="ManegmentDoctor" asp-action="Details" asp-route-id="@employee.Id" class="btn">Details</a>
+
+                        }
+                        else if (employee.UserType == "Admin")
+                        {
+                            <a asp-controller="ManegmentAdmin" asp-action="EditAdmin" asp-route-id="@employee.Id" class="btn">Edit Admin</a>
+                            <a asp-controller="ManegmentAdmin" asp-action="Details" asp-route-id="@employee.Id" class="btn">Details</a>
+
+                        }
+                        else if (employee.UserType == "Nurse")
+                        {
+                            <a asp-controller="ManegmentNurse" asp-action="EditNurse" asp-route-id="@employee.Id" class="btn">Edit Nurse</a>
+                            <a asp-controller="ManegmentNurse" asp-action="Details" asp-route-id="@employee.Id" class="btn">Details</a>
+
+                        }
+
+
+                        <form asp-action="DeleteConfirmed" asp-route-id="@employee.Id" method="post" style="display:inline;">
                             <button type="submit" class="btn">Delete</button>
                         </form>
                     </td>

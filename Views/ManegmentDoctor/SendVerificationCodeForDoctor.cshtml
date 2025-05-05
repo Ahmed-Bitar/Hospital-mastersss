@@ -121,22 +121,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-                $(document).ready(function () {
-            var canSendCode = true;
-            var countdownTimer;
-
+        $(document).ready(function () {
             $('form').submit(function (e) {
                 e.preventDefault();
 
-                if (!canSendCode) {
-                    return;
-                }
-
                 var email = $('input[name="email"]').val();
-                var $submitButton = $('button[type="submit"]');
-
-                $submitButton.prop('disabled', true);
-                $submitButton.html('<i class="fas fa-spinner fa-spin"></i> Sending...');
 
                 $.ajax({
                     url: '@Url.Action("SendVerificationCodeForDoctor", "ManegmentDoctor")',
@@ -144,44 +133,17 @@
                     data: { email: email },
                     success: function (response) {
                         if (response.success) {
-                            window.location.href = response.redirectUrl;
+                            alert('Verification code sent successfully!');
+                            window.location.href = '/ManegmentDoctor/VerifyDoctorCodes';
                         } else {
-                            alert(response.message);
-                            startCountdown($submitButton);
+                            alert(response.message || 'Failed to send verification code.');
                         }
                     },
                     error: function () {
                         alert('An error occurred while sending the verification code.');
-                        startCountdown($submitButton);
                     }
                 });
             });
-
-            function startCountdown($button) {
-                canSendCode = false;
-                var timeLeft = 90;
-                $button.prop('disabled', true);
-
-                updateButtonText(timeLeft);
-
-                countdownTimer = setInterval(function () {
-                    timeLeft--;
-                    updateButtonText(timeLeft);
-
-                    if (timeLeft <= 0) {
-                        clearInterval(countdownTimer);
-                        canSendCode = true;
-                        $button.prop('disabled', false);
-                        $button.html('<i class="fas fa-paper-plane"></i> Send Code');
-                    }
-                }, 1000);
-            }
-
-            function updateButtonText(time) {
-                $('button[type="submit"]').html('<i class="fas fa-clock"></i> Wait ' + time + 's');
-            }
         });
-
-
     </script>
 }

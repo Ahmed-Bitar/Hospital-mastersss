@@ -1,10 +1,12 @@
 ﻿using System.Net.Mail;
+using System.Numerics;
 using MedicalPark.Dbcontext;
 using MedicalPark.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using static MedicalPark.Models.Doctor;
 
@@ -54,6 +56,7 @@ namespace MedicalPark.Controllers
         [HttpPost]
         public async Task<IActionResult> SendVerificationCodeNurse(string email)
         {
+            HttpContext.Session.SetString("NurseEmail", email);
 
             if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
             {
@@ -138,34 +141,34 @@ namespace MedicalPark.Controllers
         [HttpGet]
         public IActionResult RegisterNurse()
         {
+            var email = HttpContext.Session.GetString("NurseEmail");
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("SendVerificationCodeNurse");
+            }
+
+            ViewBag.email = email;
+
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> RegisterNurse(NurseRegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var email = HttpContext.Session.GetString("VerificationEmail");
-
-                if (string.IsNullOrEmpty(email))
-                {
-                    ModelState.AddModelError(string.Empty, "Session expired. Please start over.");
-                    return View(model);
-                }
 
                 var user = new Nurse()
                 {
-                    Name = model.FullName,
-                    UserName = model.FullName.Replace(" ", ""),
-                    Email = email,
+                     Name = model.Name,
+                    UserName = model.Name.Replace(" ", ""),
+                    Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     UserType = "Nurse",
                     Gender = model.Gender,
-                    Salary = model.Salary,
-
-
-
+                    Salary = model.Salery,
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -184,7 +187,7 @@ namespace MedicalPark.Controllers
                     await _userManager.AddToRoleAsync(user, roleName);
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    return RedirectToAction("Index", "ManegmentNurse");
+                    return RedirectToAction("Index", "UserManegment");
                 }
                 else
                 {
@@ -198,7 +201,62 @@ namespace MedicalPark.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Hospital Manager")]
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var nurse = await _context.Nurses.FirstOrDefaultAsync(n => n.Id == id);
+            if (nurse == null)
+            {
+                return NotFound("Nurse not found.");
+            }
+
+            return View(nurse);
+        }
+
+
+        [HttpGet]
+        [Authorize(Roles = "Hospital Manager")]
+        public async Task<IActionResult> EditNurse(int id)
+        {
+            var nurs = await _context.Nurses.FindAsync(id);
+            if (nurs == null)
+            {
+                return NotFound();
+            }
+
+            return View(nurs);
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Hospital Manager")]
+        public async Task<IActionResult> EditNurse(int id, NurseRegisterViewModel editNurse)
+        {
+            var nurs = await _context.Nurses.FindAsync(id);
+            if (!ModelState.IsValid)
+            {
+                if (nurs == null)
+                {
+                    return NotFound();
+                }
+
+                nurs.Name = editNurse.Name;
+                nurs.Gender = editNurse.Gender;
+                nurs.Email = editNurse.Email;
+                nurs.PhoneNumber = editNurse.PhoneNumber;
+                nurs.Salary = editNurse.Salery;
+                nurs.UserType = "Nurse";
+
+                _context.Update(nurs);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "UserManegment");
+
+            }
+
+            return View(nurs);
+        }
 
         private string GenerateVerificationCodeEmployee()
         {

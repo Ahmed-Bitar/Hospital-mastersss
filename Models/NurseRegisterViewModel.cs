@@ -10,7 +10,7 @@ namespace MedicalPark.Models
         [Required]
 
         [Display(Name = "Full Name")]
-        public string FullName { get; set; }
+        public string Name { get; set; }
 
 
         [Required]
@@ -31,6 +31,6 @@ namespace MedicalPark.Models
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
         public string Gender { get; set; }
-        public int Salary { get; set; }
+        public int Salery { get; set; }
     }
 }

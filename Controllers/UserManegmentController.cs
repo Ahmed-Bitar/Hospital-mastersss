@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using ServiceStack;
 using static MedicalPark.Models.Doctor;
 
 namespace MedicalPark.Controllers
@@ -42,13 +43,44 @@ namespace MedicalPark.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var doctorsAndNurses = await _userManager.GetUsersInRoleAsync("Doctor");
+            var doctors = await _userManager.GetUsersInRoleAsync("Doctor");
             var nurses = await _userManager.GetUsersInRoleAsync("Nurse");
-            var allDoctorsAndNurses = doctorsAndNurses.Concat(nurses).ToList();
-            return View(allDoctorsAndNurses);
+            var admins = await _userManager.GetUsersInRoleAsync("admin");
+
+            var allUsers = doctors.Concat(nurses).Concat(admins).ToList();
+            return View(allUsers);
 
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Hospital Manager")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var doctor = await _context.Doctors.FindAsync(id);
+            if (doctor == null)
+            {
+                return NotFound("Doctor not found.");
+            }
+
+            return View(doctor);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Hospital Manager")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var doctor = await _context.Doctors.FindAsync(id);
+            if (doctor == null)
+            {
+                return NotFound($"Doctor with ID {id} not found.");
+            }
+
+            _context.Doctors.Remove(doctor);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "UserManegment");
+
+        }
         public IActionResult CreateDoctorAndNurs()
         {
             return View();

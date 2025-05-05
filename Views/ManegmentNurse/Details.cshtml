@@ -1,0 +1,117 @@
+﻿@model MedicalPark.Models.Nurse
+
+@{
+    ViewData["Title"] = "Nurse Details";
+}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(90deg, #0f172a, #1e293b);
+        color: #d1d5db;
+    }
+
+    h1 {
+        color: #00b0ff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        background-color: #1e293b;
+        color: #d1d5db;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-header {
+        background-color: #2d3e50;
+        color: #ffffff;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    dl dt {
+        font-weight: bold;
+    }
+
+    dl dd {
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        font-size: 16px;
+        font-weight: 600;
+        padding: 12px 20px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: #d1d5db;
+        display: inline-block;
+        box-sizing: border-box;
+        background-color: transparent;
+        border: 1px solid #d1d5db;
+    }
+
+        .btn:hover {
+            background-color: #2d3e50;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+    .btn-warning {
+        background-color: #ff7f50;
+        border-color: #ff7f50;
+    }
+
+        .btn-warning:hover {
+            background-color: #e68900;
+            border-color: #e68900;
+        }
+
+    .btn-secondary {
+        background-color: #4b5563;
+        border-color: #4b5563;
+    }
+
+        .btn-secondary:hover {
+            background-color: #2d3e50;
+            border-color: #2d3e50;
+        }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
+<h2>Nurse Details</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Nurse Information</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">Full Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Phone Number</dt>
+            <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+            <dt class="col-sm-3">Gender</dt>
+            <dd class="col-sm-9">@Model.Gender</dd>
+
+            <dt class="col-sm-3">Salary</dt>
+            <dd class="col-sm-9">@Model.Salary</dd>
+        </dl>
+    </div>
+</div>
+
+<div>
+    <a href="@Url.Action("Edit", "ManegmentNurse", new { id = Model.Id })" class="btn btn-primary">Edit</a>
+    <a href="@Url.Action("Index", "ManegmentNurse")" class="btn btn-secondary">Back to List</a>
+</div>

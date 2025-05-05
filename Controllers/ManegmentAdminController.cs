@@ -146,9 +146,7 @@ namespace MedicalPark.Controllers
         [HttpGet]
         public async Task<IActionResult> RegisterAdmin()
         {
-            ViewBag.Departments = Enum.GetValues(typeof(Department)).Cast<Department>().ToList();
-            ViewBag.ManegmentTypes = Enum.GetValues(typeof(ManegmentType)).Cast<ManegmentType>().ToList();
-
+            LoadViewBags();
             return View();
         }
 
@@ -157,13 +155,12 @@ namespace MedicalPark.Controllers
         {
             if (ModelState.IsValid)
             {
-                var emailsending = TempData["Email"] as string;
 
                 var user = new Admin()
                 {
                     Name = model.FullName,
                     UserName = model.FullName.Replace(" ", ""),
-                    Email = emailsending,
+                    Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     UserType = model.UserType,
                     Gender = model.Gender,
@@ -197,11 +194,66 @@ namespace MedicalPark.Controllers
                 }
             }
 
-            ViewBag.Departments = Enum.GetValues(typeof(Department)).Cast<Department>().ToList();
-            ViewBag.ManegmentTypes = Enum.GetValues(typeof(ManegmentType)).Cast<ManegmentType>().ToList();
 
             return View(model);
         }
+        [HttpGet]
+        public async Task<IActionResult> EditAdmin(int id)
+        {
+            var manegmaent = await _context.Managements.FindAsync(id);
+            if (manegmaent == null)
+            {
+                return NotFound("Management not found.");
+            }
+
+            LoadViewBags();
+            return View(manegmaent);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditAdmin(int id, AdminRegisterViewModel adminRegisterViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var manegment = await _context.Managements.FindAsync(id);
+                if (manegment == null)
+                {
+                    return NotFound("Management not found.");
+                }
+
+                manegment.Name = adminRegisterViewModel.FullName;
+                manegment.Gender = adminRegisterViewModel.Gender;
+                manegment.Type = adminRegisterViewModel.Type;
+                manegment.Department = adminRegisterViewModel.Department;
+                manegment.Email = adminRegisterViewModel.Email;
+                manegment.PhoneNumber = adminRegisterViewModel.PhoneNumber;
+                manegment.UserName = adminRegisterViewModel.FullName.Replace(" ", "");
+                manegment.UserType= "Admin";
+
+                _context.Update(manegment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "UserManegmentController");
+
+            }
+
+            LoadViewBags();
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var manegment = await _context.Managements.FindAsync(id);
+            if (manegment == null)
+            {
+                return NotFound("Management not found.");
+            }
+
+            return View(manegment);
+        }
+
+
+
         private string GenerateVerificationCodeEmployee()
         {
             var random = new Random();
@@ -231,6 +283,16 @@ namespace MedicalPark.Controllers
             {
                 return false;
             }
+
+        }
+        private void LoadViewBags()
+        {
+            ViewBag.Departments = Enum.GetValues(typeof(Department)).Cast<Department>();
+            ViewBag.ManegmentTypes = Enum.GetValues(typeof(ManegmentType)).Cast<ManegmentType>();
+            ViewBag.Gender = new List<string> { "Female", "Male" };
+            ViewBag.email = TempData["Email"] as string;
+
         }
     }
+    
 }

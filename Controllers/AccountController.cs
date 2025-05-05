@@ -168,8 +168,8 @@ namespace MedicalPark.Controllers
 
                 var user = new Patient()
                 {
-                    Name = model.FullName,
-                    UserName = model.FullName.Replace(" ", ""),
+                    Name = model.Name,
+                    UserName = model.Name.Replace(" ", ""),
                     Email = email,
                     PhoneNumber = model.PhoneNumber,
                     Gender=model.Gender,
