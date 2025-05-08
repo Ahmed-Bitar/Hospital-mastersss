@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MedicalPark.Migrations
 {
     /// <inheritdoc />
-    public partial class شش : Migration
+    public partial class aa : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,22 +66,6 @@ namespace MedicalPark.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EmailVerificationCodes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SentAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmailVerificationCodes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -436,9 +420,6 @@ namespace MedicalPark.Migrations
 
             migrationBuilder.DropTable(
                 name: "DoctorPatient");
-
-            migrationBuilder.DropTable(
-                name: "EmailVerificationCodes");
 
             migrationBuilder.DropTable(
                 name: "MedicalRecords");

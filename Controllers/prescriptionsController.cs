@@ -5,20 +5,42 @@ using MedicalPark.Models;
 using Microsoft.AspNetCore.Authorization;
 using MedicalPark.Dbcontext;
 using MedicalPark.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace MedicalPark.Controllers
 {
-    [Authorize(Roles = "Management,Doctor,AllRole")]
+    [Authorize(Roles = "Doctor,Patient")]
 
     public class PrescriptionsController : Controller
     {
         private readonly HospitalDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public PrescriptionsController(HospitalDbContext context)
         {
             _context = context;
         }
-        [Authorize(Roles = "Management,Doctor,AllRole")]
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> PatientIndex()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null || currentUser is not Patient patientUser)
+            {
+                Console.WriteLine("aaaaaaaaaaaaaaaaaa");
+            }
+            var prescriptionsList = await _context.Prescriptions
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+               .Where(m => m.PatientID == currentUser.Id)
+
+                .ToListAsync();
+
+            return View(prescriptionsList);
+        }
+
+        [Authorize(Roles = "Management,Doctor")]
 
         public async Task<IActionResult> Index()
         {
@@ -78,9 +100,8 @@ namespace MedicalPark.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        [Authorize(Roles = "Doctor")]
 
-        [HttpGet]
+          [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var appointments = await _context.Appointments
@@ -105,7 +126,7 @@ namespace MedicalPark.Controllers
         [Authorize(Roles = "Doctor")]
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, PrescriptionDto prescriptionDto, int appointmentId)
+        public async Task<IActionResult> Edit(int id, PrescriptionDto prescriptionDto)
         {
             var prescription = await _context.Prescriptions
                 .Include(p => p.Doctor)
@@ -120,14 +141,14 @@ namespace MedicalPark.Controllers
             var appointment = await _context.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Patient)
-                .SingleOrDefaultAsync(a => a.Id == appointmentId);
+                .SingleOrDefaultAsync(a => a.Id == prescription.AppointmentId);
 
             if (appointment == null)
             {
                 return NotFound("Appointment not found.");
             }
 
-            prescription.AppointmentId = appointmentId;
+            prescription.AppointmentId = appointment.Id;
             prescription.PatientID = appointment.Patient.Id;
             prescription.DoctorID = appointment.Doctor.Id;
             prescription.DoctorName = appointment.Doctor.Name;
@@ -139,15 +160,17 @@ namespace MedicalPark.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        [Authorize(Roles = "Management,Patient,Doctor")]
+
 
         [HttpGet]
+        [Authorize(Roles = "Management,Patient,Doctor")]
         public async Task<IActionResult> Details(int id)
         {
             var prescription = await _context.Prescriptions
-                .Include(p => p.Patient)
                 .Include(p => p.Doctor)
-                .SingleOrDefaultAsync(p => p.Id == id);
+                .Include(p => p.Patient)
+                .Include(p => p.Appointment)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (prescription == null)
             {
@@ -158,26 +181,25 @@ namespace MedicalPark.Controllers
         }
 
 
-
         [Authorize(Roles = "Doctor")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var manegmaent = await _context.Managements
+            var prescription = await _context.Prescriptions
                 .FirstOrDefaultAsync(a => a.Id == id);
 
 
-            return View(manegmaent);
+            return View(prescription);
         }
         [Authorize(Roles = "Doctor")]
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var manegmaent = await _context.Managements.FindAsync(id);
+            var Presepriction = await _context.Prescriptions.FindAsync(id);
 
 
-            _context.Managements.Remove(manegmaent);
+            _context.Prescriptions.Remove(Presepriction);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

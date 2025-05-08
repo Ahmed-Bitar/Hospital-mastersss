@@ -1,6 +1,5 @@
 ﻿@model MedicalPark.Models.Appointment
 
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
@@ -17,42 +16,66 @@
     }
 
     .form-container {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 60%;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 600px;
         margin: 0 auto;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
     }
 
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
 
     label {
         font-weight: 500;
-        color: #007bff;
+        color: #00b0ff;
+        display: block;
+        margin-bottom: 8px;
     }
 
     input, select, textarea {
         width: 100%;
-        padding: 10px;
-        margin-top: 5px;
+        padding: 12px;
+        margin-top: 8px;
         border: 1px solid #ddd;
-        border-radius: 5px;
+        border-radius: 10px;
+        background-color: #2c3e50;
+        color: #fff;
     }
 
+        input:focus, select:focus, textarea:focus {
+            border-color: #00b0ff;
+            outline: none;
+        }
+
     .btn-primary {
-        padding: 10px 20px;
+        padding: 12px 24px;
         background-color: #007bff;
         color: white;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
+        font-weight: 600;
         transition: 0.3s;
     }
 
         .btn-primary:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+    .btn-create {
+        background-color: #005b8f;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .btn-create:hover {
+            background-color: #003f5f;
         }
 </style>
 
@@ -69,7 +92,6 @@
             <textarea asp-for="Sickness"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
-        <a href="@Url.Action("Index", "Appointment")" class="btn btn-create" style="background-color: #005b8f; margin-left:10px;">Back</a>
-
+        <a href="@Url.Action("Index", "Appointment")" class="btn btn-create" style="margin-left:10px;">Back</a>
     </form>
 </div>

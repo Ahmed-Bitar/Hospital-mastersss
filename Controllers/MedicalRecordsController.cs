@@ -1,27 +1,31 @@
 ﻿using MedicalPark.Dbcontext;
 using MedicalPark.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace MedicalPark.Controllers
 {
-    [Authorize(Roles = "Management,Doctor,Nurse,AllRole")]
+    [Authorize(Roles = "Admin,Doctor,Nurse,Patient ")]
 
     public class MedicalRecordsController : Controller
     {
         private readonly HospitalDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public MedicalRecordsController(HospitalDbContext context)
         {
             _context = context;
         }
 
+        [Authorize(Roles = "Admin,Doctor,Nurse ")]
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+
             var medicalRecords = await _context.MedicalRecords
                 .Include(m => m.Patient)
                 .Include(m => m.Doctor)
@@ -33,9 +37,29 @@ namespace MedicalPark.Controllers
 
             return View(groupedRecords);
         }
+        [Authorize(Roles = "Patient ")]
+        [HttpGet]
+        public async Task<IActionResult> PatientIndex()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null || currentUser is not Patient patientUser)
+            {
+                Console.WriteLine("aaaaaaaaaaaaaaaaaa");
+            }
+            var medicalRecords = await _context.MedicalRecords
+                .Include(m => m.Patient)
+                .Include(m => m.Doctor)
+                .Where(m => m.PatientId == currentUser.Id)
+                .ToListAsync();
 
+            var groupedRecords = medicalRecords
+                .GroupBy(m => m.PationName)
+                .ToList();
 
-        [Authorize(Roles = "Management")]
+            return View(groupedRecords);
+        }
+
+        [Authorize(Roles = "Admin")]
 
 
         [HttpGet]
@@ -50,7 +74,7 @@ namespace MedicalPark.Controllers
             return View(new MedicalRecord());
         }
 
-        [Authorize(Roles = "Management")]
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         public async Task<IActionResult> Create(int[] selectedPrescriptions)
@@ -82,7 +106,7 @@ namespace MedicalPark.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        [Authorize(Roles = "Management,Doctor,Nurse")]
+        [Authorize(Roles = "Admin,Doctor,Nurse")]
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
@@ -118,7 +142,7 @@ namespace MedicalPark.Controllers
 
             return View(medicalRecord);
         }
-        [Authorize(Roles = "Management,Doctor,Nurse")]
+        [Authorize(Roles = "Admin,Doctor,Nurse")]
         [HttpGet]
         public async Task<IActionResult> GetMedicalRecordsByPatientId(int patientId)
         {
@@ -146,7 +170,7 @@ namespace MedicalPark.Controllers
             return View(new MedicalRecord());
         }
 
-        [Authorize(Roles = "Management,Doctor")]
+        [Authorize(Roles = "Admin,Doctor")]
 
         [HttpPost]
         public async Task<IActionResult> Edit(int id, MedicalRecord medicalRecord)
@@ -172,41 +196,8 @@ namespace MedicalPark.Controllers
             }
             return View(medicalRecord);
         }
-        [Authorize(Roles = "Management")]
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var medicalRecord = await _context.MedicalRecords
-                                    .Include(m => m.Patient)
-                                    .Include(m => m.Doctor)
-                                    .SingleOrDefaultAsync(m => m.Id == id);
-
-            if (medicalRecord == null)
-            {
-                return NotFound($"Medical record with ID {id} not found.");
-            }
-
-            return View(medicalRecord);
-        }
-        [Authorize(Roles = "Management")]
-
-        [HttpPost]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var medicalRecord = await _context.MedicalRecords.FindAsync(id);
-            if (medicalRecord == null)
-            {
-                return NotFound($"Medical record with ID {id} not found.");
-            }
-
-            _context.MedicalRecords.Remove(medicalRecord);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        
-        
-        
-        }
+       
 
     }
 }

@@ -204,33 +204,6 @@ namespace MedicalPark.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("MedicalPark.Models.EmailVerificationCode", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("SentAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailVerificationCodes");
-                });
-
             modelBuilder.Entity("MedicalPark.Models.MedicalRecord", b =>
                 {
                     b.Property<int>("Id")

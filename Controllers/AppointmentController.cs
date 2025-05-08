@@ -10,6 +10,7 @@ using MedicalPark.Models;
 
 namespace MedicalPark.Controllers
 {
+    [Authorize(Roles = "Admin,Doctor,Patient")]
     public class AppointmentController : Controller
     {
         private readonly HospitalDbContext _context;
@@ -25,10 +26,26 @@ namespace MedicalPark.Controllers
             _userManager = userManager;
           
         }
+        [HttpGet]
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> PatientIndex()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null || currentUser is not Patient patientUser)
+            {
+                Console.WriteLine("aaaaaaaaaaaaaaaaaa");
+            }
+            var appointments = await _context.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Patient)
+                .Where(a => a.PatientId == currentUser.Id)
+                .ToListAsync();
 
+            return View(appointments);
+        }
 
         [HttpGet]
-        [Authorize(Roles = "Management,Doctor,Patient,AllRole")]
+        [Authorize(Roles = "Management,Doctor")]
         public async Task<IActionResult> Index()
         {
             var appointments = await _context.Appointments
@@ -162,7 +179,7 @@ namespace MedicalPark.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Managadminement,Patient")]
+        [Authorize(Roles = "admin,Patient")]
         public async Task<IActionResult> Delete(int id)
         {
             var appointment = await _context.Appointments
@@ -179,7 +196,7 @@ namespace MedicalPark.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin,Patient")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var appointment = await _context.Appointments.FindAsync(id);
@@ -193,7 +210,21 @@ namespace MedicalPark.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        [Authorize(Roles = "admin,Patient")]
+        public async Task<IActionResult> PatientDelete(int id)
+        {
+            var appointment = await _context.Appointments.FindAsync(id);
+            if (appointment == null)
+            {
+                return NotFound("Appointment not found.");
+            }
 
+            _context.Appointments.Remove(appointment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(PatientIndex));
+        }
         private async Task LoadDoctorAndPatientData()
         {
             ViewBag.Doctors = new SelectList(await _context.Doctors.Where(e => e!.IsDeleted == false).ToListAsync(), "Id", "Name");

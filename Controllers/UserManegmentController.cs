@@ -11,7 +11,7 @@ using static MedicalPark.Models.Doctor;
 
 namespace MedicalPark.Controllers
 {
-    [Authorize(Roles = "Hospital Manager,AllRole")]
+    [Authorize(Roles = "Hospital Manager")]
 
     public class UserManegmentController : Controller
     {

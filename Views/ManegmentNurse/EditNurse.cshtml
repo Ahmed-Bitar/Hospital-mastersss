@@ -1,7 +1,7 @@
 ﻿@model MedicalPark.Models.Nurse
 
 @{
-    ViewData["Title"] = "Edit Nurse Details";
+    ViewData["Title"] = "Edit Nurse";
 }
 <style>
     body {
@@ -59,45 +59,50 @@
         box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
     }
 </style>
-<h2>Edit Nurse Details</h2>
 
-<h4>Edit Nurse</h4>
-<hr />
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">Edit Nurse Information</h2>
+    <form asp-action="EditNurse" method="post">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Name" class="form-label">Full Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
 
-<form asp-action="EditNurse" method="post">
-    <div class="form-group">
-        <label asp-for="Name" class="control-label">Full Name</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Gender" class="form-label">Gender</label>
+                <select asp-for="Gender" class="form-select">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Gender" class="control-label">Gender</label>
-        <select asp-for="Gender" class="form-control">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-        <span asp-validation-for="Gender" class="text-danger"></span>
-    </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Email" class="control-label">Email</label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
-        <input asp-for="PhoneNumber" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Salary" class="form-label">Salary</label>
+                <input asp-for="Salary" class="form-control" />
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Salary" class="control-label">Salary</label>
-        <input asp-for="Salary" class="form-control" />
-        <span asp-validation-for="Salary" class="text-danger"></span>
-    </div>
+        <button type="submit" class="btn btn-success mt-3">Save Changes</button>
+        <a asp-action="Index" asp-controller="ManegmentNurse" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>
 
-    <button type="submit" class="btn btn-primary">Update</button>
-    <a href="@Url.Action("Index", "ManegmentNurse")" class="btn btn-secondary">Back to List</a>
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

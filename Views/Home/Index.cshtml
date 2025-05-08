@@ -223,7 +223,7 @@
         <p class="lead">Manage your hospital resources, doctors, patients, and more with ease!</p>
     </div>
     <div class="row text-center mt-4">
-        @if (User.IsInRole("Management") || User.IsInRole("Doctor") || User.IsInRole("AllRole"))
+        @if ( User.IsInRole("Doctor") )
         {
             <div class="col-md-4 col-sm-6 col-12">
                 <a asp-controller="Prescriptions" asp-action="Index" class="card-box">
@@ -236,9 +236,23 @@
                     </div>
                 </a>
             </div>
+        } 
+        @if (User.IsInRole("Patient"))
+        {
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="Prescriptions" asp-action="PatientIndex" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-file-prescription fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Prescriptions</h5>
+                        <p>Manage prescriptions</p>
+                    </div>
+                </a>
+            </div>
         }
 
-        @if (User.IsInRole("Management") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("AllRole"))
+        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") )
         {
             <div class="col-md-4 col-sm-6 col-12">
                 <a asp-controller="MedicalRecords" asp-action="Index" class="card-box">
@@ -254,10 +268,27 @@
         }
 
         
-    </div>
+    </div>  @if ( User.IsInRole("Patient"))
+    {
+        <div class="col-md-4 col-sm-6 col-12">
+            <a asp-controller="MedicalRecords" asp-action="Index" class="card-box">
+                <div class="icon-wrapper">
+                    <i class="fas fa-notes-medical fa-2x"></i>
+                </div>
+                <div class="content-wrapper">
+                    <h5>Medical Records</h5>
+                    <p>Access medical records</p>
+                </div>
+            </a>
+        </div>
+    }
+
+
+</div>
+
 
     <div class="row text-center mt-4">
-        @if (User.IsInRole("Hospital Manager") || User.IsInRole("AllRole"))
+        @if (User.IsInRole("Hospital Manager") )
 
         {
 
@@ -277,7 +308,7 @@
 
 
 
-        @if (User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Admin") || User.IsInRole("AllRole"))
+        @if (User.IsInRole("Doctor") || User.IsInRole("Admin") )
         {
             <div class="col-md-4 col-sm-6 col-12">
                 <a asp-controller="Appointment" asp-action="Index" class="card-box">
@@ -290,10 +321,23 @@
                     </div>
                 </a>
             </div>
+        }  @if ( User.IsInRole("Patient") )
+        {
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="Appointment" asp-action="PatientIndex" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-calendar-alt fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Appointments</h5>
+                        <p>Schedule and view appointments</p>
+                    </div>
+                </a>
+            </div>
         }
+        
 
-
-        @if (User.IsInRole("Management") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse") || User.IsInRole("AllRole"))
+        @if (User.IsInRole("Management") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse") )
         {
             <div class="col-md-4 col-sm-6 col-12">
                 <a asp-controller="Reports" asp-action="Index" class="card-box">
@@ -307,20 +351,7 @@
                 </a>
             </div>
 
-            @if (User.IsInRole("Patient") || User.IsInRole("AllRole"))
-            {
-                <div class="col-md-4 col-sm-6 col-12">
-                    <a asp-controller="Account" asp-action="PatientManegment" class="card-box">
-                        <div class="icon-wrapper">
-                            <i class="fas fa-notes-medical fa-2x"></i>
-                        </div>
-                        <div class="content-wrapper">
-                            <h5>Patient Manegment</h5>
-                            <p>View your prescriptions and diagnoses</p>
-                        </div>
-                    </a>
-                </div>
-            }
+           
         }
     </div>
 

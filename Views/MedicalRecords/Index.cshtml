@@ -73,11 +73,14 @@
 
 <div class="container mt-5">
     <h2>Medical Records</h2>
-
+     @if (User.IsInRole("Admin"))
+        {
     <div class="text-right mb-3">
         <a asp-action="Create" class="btn btn-primary">+ Add New Medical Record</a>
     </div>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-create" style="background-color: #005b8f; margin-left:10px;">Back</a>
 
+        }
     <table>
         <thead>
             <tr>
@@ -100,10 +103,7 @@
                     <td>@medicals</td>
                     <td>
                         <a asp-action="Details" asp-route-id="@firstRecord.Id" class="btn btn-details">Details</a> |
-                        <a asp-action="Edit" asp-route-id="@firstRecord.Id" class="btn btn-edit">Edit</a> |
-                        <form asp-action="Delete" asp-route-id="@firstRecord.Id" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-delete">Delete</button>
-                        </form>
+                   
                     </td>
                 </tr>
             }

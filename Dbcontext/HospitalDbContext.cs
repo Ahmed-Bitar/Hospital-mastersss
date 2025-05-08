@@ -27,7 +27,6 @@ namespace MedicalPark.Dbcontext
         public DbSet<Nurse> Nurses { get; set; }
         public DbSet<Admin> Managements { get; set; }
         public DbSet<ApplicationUser> Users { get; set; }
-        public DbSet<EmailVerificationCode> EmailVerificationCodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

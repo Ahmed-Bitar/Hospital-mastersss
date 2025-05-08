@@ -13,6 +13,8 @@ using static MedicalPark.Models.Doctor;
 
 namespace MedicalPark.Controllers
 {
+    [Authorize(Roles = "Hospital Manager")]
+
     public class ManegmentNurseController : Controller
     {
         private readonly EmailVerificationService _emailService;
@@ -87,13 +89,16 @@ namespace MedicalPark.Controllers
         }
 
 
-        
+
+        [Authorize(Roles = "Hospital Manager")]
 
         [HttpGet]
         public IActionResult VerifyNurseCodes()
         {
             return View();
         }
+        [Authorize(Roles = "Hospital Manager")]
+
         [HttpPost]
         public IActionResult VerifyNurseCodes(string nurseCode, string managerCode)
         {
@@ -129,6 +134,7 @@ namespace MedicalPark.Controllers
         }
 
 
+        [Authorize(Roles = "Hospital Manager")]
 
         [HttpGet]
         public IActionResult RegisterNurse()
@@ -146,16 +152,14 @@ namespace MedicalPark.Controllers
         }
 
         [Authorize(Roles = "Hospital Manager")]
-
         [HttpPost]
         public async Task<IActionResult> RegisterNurse(NurseRegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-
                 var user = new Nurse()
                 {
-                     Name = model.Name,
+                    Name = model.Name,
                     UserName = model.Name.Replace(" ", ""),
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
@@ -178,7 +182,7 @@ namespace MedicalPark.Controllers
                     }
 
                     await _userManager.AddToRoleAsync(user, roleName);
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+
 
                     return RedirectToAction("Index", "UserManegment");
                 }
@@ -190,13 +194,13 @@ namespace MedicalPark.Controllers
                     }
                 }
             }
+
             HttpContext.Session.SetString("NurseEmail", model.Email);
-
             ViewBag.email = model.Email;
-
 
             return View(model);
         }
+
 
         [HttpGet]
         [Authorize(Roles = "Hospital Manager")]

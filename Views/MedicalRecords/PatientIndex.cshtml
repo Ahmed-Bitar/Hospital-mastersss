@@ -1,12 +1,7 @@
-﻿@model IEnumerable<MedicalPark.Models.MedicalRecord>
-
-
-@{
-    ViewData["Title"] = "Medical Records";
-}
+﻿@model IEnumerable<IGrouping<string,MedicalPark.Models.MedicalRecord>>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
     body {
@@ -62,50 +57,49 @@
             transform: scale(1.05);
         }
 
-    .btn-back {
-        background-color: #d9534f;
+    .btn-create {
+        background-color: #005b8f;
     }
 
-        .btn-back:hover {
-            background-color: #c9302c;
+        .btn-create:hover {
+            background-color: #003f5f;
+            transform: scale(1.05);
         }
 
     .text-right {
         text-align: right;
     }
 </style>
+<a href="@Url.Action("Index", "Home")" class="btn btn-create" style="background-color: #005b8f; margin-left:10px;">Back</a>
 
 <div class="container mt-5">
-    <h1>Medical Records for Patient</h1>
+    <h2>Medical Records</h2>
 
-    <div class="text-right mb-3">
-        <a href="@Url.Action("Index", "Patients")" class="btn btn-back">Back to Patients List</a>
-    </div>
+ 
 
     <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Patient Name</th>
-                <th>Doctor Name</th>
-                <th>Medical Condition</th>
+                <th>Doctor Names</th>
+                <th>Medical Name</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var record in Model)
+            @foreach (var group in Model)
             {
+                var firstRecord = group.First();
+                var doctorNames = string.Join(", ", group.Select(g => g.DoctorName).Distinct());
+                var medicals = string.Join(", ", group.Select(g => g.Medicals).Distinct());
+
                 <tr>
-                    <td>@record.Id</td>
-                    <td>@record.PationName</td>
-                    <td>@record.DoctorName</td>
-                    <td>@record.Medicals</td>
+                    <td>@firstRecord.PationName</td>
+                    <td>@doctorNames</td>
+                    <td>@medicals</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@record.Id" class="btn btn-edit">Details</a>
-                        <a asp-action="Edit" asp-route-id="@record.Id" class="btn btn-edit">Edit</a>
-                        <form asp-action="Delete" asp-route-id="@record.Id" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-delete">Delete</button>
-                        </form>
+                        <a asp-action="Details" asp-route-id="@firstRecord.Id" class="btn btn-details">Details</a> |
+                       
                     </td>
                 </tr>
             }

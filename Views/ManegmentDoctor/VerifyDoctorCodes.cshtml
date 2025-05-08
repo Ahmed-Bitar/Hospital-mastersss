@@ -88,18 +88,20 @@
 
     <div class="row justify-content-center mt-5">
         <div class="col-md-6">
-            <form id="verifyForm">
-                <div class="form-group">
-                    <label for="AdmineCode">Admin Verification Code</label>
-                    <input type="text" id="AdmineCode" name="AdmineCode" class="form-control" required />
+            <form id="verifyForm" method="post">
+                <div class="option-box">
+                    <div class="form-group">
+                        <label>Doctor Code</label>
+                        <input type="text" id="doctorCodeInput" class="form-control" name="doctorCode" required />
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>Manager Code</label>
+                        <input type="text" id="managerCodeInput" class="form-control" name="managerCode" required />
+                    </div>
+                    <button type="submit" id="verifyButton" class="btn btn-primary mt-3">
+                        <i class="fas fa-check"></i> Verify Code
+                    </button>
                 </div>
-
-                <div class="form-group">
-                    <label for="managerCode">Manager Verification Code</label>
-                    <input type="text" id="managerCode" name="managerCode" class="form-control" required />
-                </div>
-
-                <button type="submit" class="btn btn-primary">Verify Codes</button>
             </form>
         </div>
     </div>
@@ -110,24 +112,23 @@
 
     <script>
         $(document).ready(function () {
-            $('#verifyForm').submit(function (e) {
+            $('#verifyButton').click(function (e) {
                 e.preventDefault();
-
-                var AdmineCode = $('#AdmineCode').val();
-                var managerCode = $('#managerCode').val();
+                var doctorCode = $('#doctorCodeInput').val();
+                var managerCode = $('#managerCodeInput').val();
 
                 $.ajax({
-                    url: '@Url.Action("VerifyAdminCodes", "ManegmentAdmin")',
+                    url: '@Url.Action("VerifyDoctorCodes", "ManegmentDoctor")',
                     type: 'POST',
                     data: {
-                        AdmineCode: AdmineCode,
+                        doctorCode: doctorCode,
                         managerCode: managerCode
                     },
                     success: function (response) {
                         if (response.success) {
                             window.location.href = response.redirectUrl;
                         } else {
-                            alert(response.message || "Verification failed.");
+                            alert(response.message);
                         }
                     },
                     error: function () {

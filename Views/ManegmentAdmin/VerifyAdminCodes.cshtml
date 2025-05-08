@@ -90,7 +90,7 @@
                 <div class="option-box">
                     <div class="form-group">
                         <label>Admin Code</label>
-                        <input type="text" id="AdmineCodeInput" class="form-control" name="AdmineCode" required />
+                        <input type="text" id="adminCodeInput" class="form-control" name="adminCode" required />
                     </div>
                     <div class="form-group mt-3">
                         <label>Manager Code</label>
@@ -113,14 +113,14 @@
             $('#verifyForm').submit(function (e) {
                 e.preventDefault();
 
-                var AdmineCode = $('#AdmineCodeInput').val();
+                var adminCode = $('#adminCodeInput').val();
                 var managerCode = $('#managerCodeInput').val();
 
                 $.ajax({
                     url: '@Url.Action("VerifyAdminCodes", "ManegmentAdmin")',
                     type: 'POST',
                     data: {
-                        AdmineCode: AdmineCode,
+                        adminCode: adminCode,
                         managerCode: managerCode
                     },
                     success: function (response) {

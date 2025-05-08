@@ -158,12 +158,12 @@ namespace MedicalPark.Controllers
             return View();
         }
 
+         
         [HttpPost]
         public async Task<IActionResult> RegisterPationt(patientRegisterViewModel model)
         {
             if (ModelState.IsValid) { 
                 var email = TempData["Email"] as string;
-
                 string roleName = "Patient";
 
                 var user = new Patient()
@@ -176,7 +176,6 @@ namespace MedicalPark.Controllers
                     UserType = model.UserType,
                     Adres = model.Adres,
                     Age = model.Age,
- 
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -191,7 +190,7 @@ namespace MedicalPark.Controllers
                         var role = new ApplicationRole(roleName);
                         await _roleManager.CreateAsync(role);
                     }
-
+                    
                     await _userManager.AddToRoleAsync(user, roleName);
                     await _signInManager.SignInAsync(user, isPersistent: false);
 

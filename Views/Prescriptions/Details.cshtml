@@ -1,96 +1,64 @@
 ﻿@model MedicalPark.Models.Prescription
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
     body {
         font-family: 'Poppins', sans-serif;
         background: linear-gradient(90deg, #1a2a3b, #112233);
         color: #ffffff;
+        margin: 0;
+        padding: 0;
     }
 
-    h1 {
-        color: #00b0ff;
+    h2 {
         text-align: center;
+        color: #00b0ff;
+        margin-top: 30px;
         margin-bottom: 20px;
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .details-container {
+        background: #fff;
+        color: #000;
+        width: 60%;
+        margin: auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
     }
 
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
+    .detail-item {
+        margin-bottom: 15px;
+        font-size: 18px;
     }
 
-    th {
-        background-color: #005b8f;
-        color: white;
-    }
-
-    tr:hover {
-        background-color: #003f5f;
-    }
+        .detail-item strong {
+            color: #005b8f;
+        }
 
     .btn {
         font-size: 16px;
         font-weight: 600;
-        padding: 12px 20px;
-        border-radius: 10px;
-        transition: all 0.3s ease;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: 0.3s ease;
         text-decoration: none;
         color: white;
         display: inline-block;
-        box-sizing: border-box;
-        width: auto;
+        margin-top: 20px;
     }
 
-    .btn-create {
+    .btn-back {
         background-color: #005b8f;
     }
 
-        .btn-create:hover {
+        .btn-back:hover {
             background-color: #003f5f;
             transform: scale(1.05);
         }
-
-    .btn-edit {
-        background-color: #28a745;
-    }
-
-        .btn-edit:hover {
-            background-color: #218838;
-            transform: scale(1.05);
-        }
-
-    .btn-delete {
-        background-color: #dc3545;
-    }
-
-        .btn-delete:hover {
-            background-color: #c82333;
-            transform: scale(1.05);
-        }
-
-    .btn-details {
-        background-color: #007bff;
-    }
-
-        .btn-details:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-    .text-right {
-        text-align: right;
-    }
 </style>
+
 <h2>Prescription Details</h2>
 
 <div class="details-container">
@@ -101,11 +69,11 @@
         <strong>Doctor Name:</strong> @Model.DoctorName
     </div>
     <div class="detail-item">
-        <strong>Prescription Name:</strong> @Model.Sickness
+        <strong>Sickness:</strong> @Model.Sickness
     </div>
     <div class="detail-item">
-        <strong>Prescription Medicals Name:</strong> @Model.MedicalsName
+        <strong>Medicals Name:</strong> @Model.MedicalsName
     </div>
 
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Index" class="btn btn-back">Back to List</a>
 </div>
