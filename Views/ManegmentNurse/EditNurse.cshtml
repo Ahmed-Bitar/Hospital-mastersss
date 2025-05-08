@@ -5,69 +5,58 @@
 }
 <style>
     body {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Roboto', sans-serif;
         background: linear-gradient(90deg, #1a2a3b, #112233);
         color: #ffffff;
+        margin: 0;
+        padding: 40px;
     }
 
     h1 {
-        color: #00b0ff;
         text-align: center;
+        color: #00b0ff;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
         margin-bottom: 20px;
     }
 
-    table {
+    label {
+        font-weight: 500;
+    }
+
+    .form-control {
         width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
     }
 
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
+    .btn-primary {
         background-color: #005b8f;
         color: white;
-    }
-
-    tr:hover {
-        background-color: #003f5f;
-    }
-
-    .btn {
-        font-size: 16px;
         font-weight: 600;
+        border: none;
         padding: 12px 20px;
         border-radius: 10px;
         transition: all 0.3s ease;
-        text-decoration: none;
-        color: white;
-        display: inline-block;
-        box-sizing: border-box;
-        background-color: transparent;
+        margin-top: 20px;
     }
 
-        .btn:hover {
-            background-color: #005b8f;
-            color: white;
-            transform: scale(1.05);
-        }
-
-    .btn-create {
-        background-color: #005b8f;
-    }
-
-        .btn-create:hover {
+        .btn-primary:hover {
             background-color: #003f5f;
             transform: scale(1.05);
         }
 
-    .text-right {
-        text-align: right;
+    .container {
+        max-width: 700px;
+        margin: auto;
+        background-color: #1f2d3a;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
     }
 </style>
 <h2>Edit Nurse Details</h2>

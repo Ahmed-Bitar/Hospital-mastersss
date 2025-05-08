@@ -1,37 +1,35 @@
-﻿@model MedicalPark.Models.Doctor
+﻿@model MedicalPark.Models.ApplicationUser
 
 @{
-    ViewData["Title"] = "Doctor Details";
+    ViewData["Title"] = "Delete User";
 }
+
 <style>
     body {
         font-family: 'Poppins', sans-serif;
-        background: linear-gradient(90deg, #0f172a, #1e293b); 
-        color: #d1d5db; 
+        background: linear-gradient(90deg, #0f172a, #1e293b);
+        color: #d1d5db;
     }
 
     h1 {
-        color: #00b0ff;
+        color: #ff4d4d;
         text-align: center;
         margin-bottom: 20px;
     }
 
     .card {
-        background-color: #1e293b; 
-        color: #d1d5db; 
+        background-color: #1e293b;
+        color: #d1d5db;
         border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); 
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        padding: 20px;
     }
 
     .card-header {
-        background-color: #2d3e50; 
+        background-color: #2d3e50;
         color: #ffffff;
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
-    }
-
-    .card-body {
-        padding: 20px;
     }
 
     dl dt {
@@ -62,18 +60,18 @@
             transform: scale(1.05);
         }
 
-    .btn-warning {
-        background-color: #ff7f50; 
-        border-color: #ff7f50;
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
     }
 
-        .btn-warning:hover {
-            background-color: #e68900;
-            border-color: #e68900;
+        .btn-danger:hover {
+            background-color: #a71d2a;
+            border-color: #a71d2a;
         }
 
     .btn-secondary {
-        background-color: #4b5563; 
+        background-color: #4b5563;
         border-color: #4b5563;
     }
 
@@ -81,18 +79,15 @@
             background-color: #2d3e50;
             border-color: #2d3e50;
         }
-
-    .text-center {
-        text-align: center;
-    }
 </style>
 
 <div class="container mt-5">
-    <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white">
-            <h4>Doctor Details</h4>
+    <div class="card">
+        <div class="card-header">
+            <h4>Confirm Delete</h4>
         </div>
         <div class="card-body">
+            <p class="text-danger">Are you sure you want to delete this user?</p>
             <dl class="row">
                 <dt class="col-sm-3">Full Name</dt>
                 <dd class="col-sm-9">@Model.Name</dd>
@@ -103,20 +98,15 @@
                 <dt class="col-sm-3">Phone Number</dt>
                 <dd class="col-sm-9">@Model.PhoneNumber</dd>
 
-                <dt class="col-sm-3">Gender</dt>
-                <dd class="col-sm-9">@Model.Gender</dd>
-
-                <dt class="col-sm-3">Specialty</dt>
-                <dd class="col-sm-9">@Model.Specialty</dd>
-
-                <dt class="col-sm-3">Salary</dt>
-                <dd class="col-sm-9">$@Model.Salery</dd>
-
                 <dt class="col-sm-3">User Type</dt>
                 <dd class="col-sm-9">@Model.UserType</dd>
             </dl>
-            <a asp-action="EditDoctor" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-            <a asp-controller="UserManegment" asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+            <form asp-action="DeleteConfirmed" method="post">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
         </div>
     </div>
 </div>

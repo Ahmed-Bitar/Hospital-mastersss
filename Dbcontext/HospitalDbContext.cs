@@ -27,6 +27,7 @@ namespace MedicalPark.Dbcontext
         public DbSet<Nurse> Nurses { get; set; }
         public DbSet<Admin> Managements { get; set; }
         public DbSet<ApplicationUser> Users { get; set; }
+        public DbSet<EmailVerificationCode> EmailVerificationCodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -114,7 +115,7 @@ namespace MedicalPark.Dbcontext
             var user = await userManager.FindByEmailAsync("Doctor@gmail.comm");
             if (user == null)
             {
-                user = new ApplicationUser
+                user = new Doctor
                 {
                     UserName = "Doctor",
                     Gender = "Male",
@@ -143,7 +144,7 @@ namespace MedicalPark.Dbcontext
             var user = await userManager.FindByEmailAsync("Doctor22222@gmail.comm");
             if (user == null)
             {
-                user = new ApplicationUser
+                user = new Doctor
                 {
                     UserName = "Doctor22222",
                     Gender = "Male",
@@ -172,7 +173,7 @@ namespace MedicalPark.Dbcontext
             var user = await userManager.FindByEmailAsync("Doctor333333@gmail.comm");
             if (user == null)
             {
-                user = new ApplicationUser
+                user = new Doctor
                 {
                     UserName = "Doctor333333",
                     Gender = "Male",
@@ -202,7 +203,7 @@ namespace MedicalPark.Dbcontext
             var user = await userManager.FindByEmailAsync("Patient111111@gmail.com");
             if (user == null)
             {
-                user = new ApplicationUser
+                user = new Patient
                 {
                     UserName = "Patient111111",
                     Gender = "Male",
@@ -231,7 +232,7 @@ namespace MedicalPark.Dbcontext
             var user = await userManager.FindByEmailAsync("Patient33333@gmail.com");
             if (user == null)
             {
-                user = new ApplicationUser
+                user = new Patient
                 {
                     UserName = "Patient33333",
                     Gender = "Male",
@@ -261,7 +262,7 @@ namespace MedicalPark.Dbcontext
             var user = await userManager.FindByEmailAsync("Patient22222222@gmail.comm");
             if (user == null)
             {
-                user = new ApplicationUser
+                user = new Patient
                 {
                     UserName = "Patient22222222",
                     Gender = "Male",
@@ -291,7 +292,7 @@ namespace MedicalPark.Dbcontext
             var user = await userManager.FindByEmailAsync("bitar@gmail.comm");
             if (user == null)
             {
-                user = new ApplicationUser
+                user = new Admin
                 {
                     UserName = "Admin",
                     Gender = "Male",
@@ -321,7 +322,7 @@ namespace MedicalPark.Dbcontext
             var user = await userManager.FindByEmailAsync("Nurse@gmail.comm");
             if (user == null)
             {
-                user = new ApplicationUser
+                user = new Nurse
                 {
                     UserName = "Nurse",
                     Gender = "Male",

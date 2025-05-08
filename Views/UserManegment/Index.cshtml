@@ -125,9 +125,10 @@
                         }
 
 
-                        <form asp-action="DeleteConfirmed" asp-route-id="@employee.Id" method="post" style="display:inline;">
-                            <button type="submit" class="btn">Delete</button>
-                        </form>
+                        <a asp-action="Delete" asp-route-id="@employee.Id" class="btn">Delete</a>
+
+                        
+                        
                     </td>
                 </tr>
             }

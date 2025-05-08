@@ -6,8 +6,8 @@
 <style>
     body {
         font-family: 'Poppins', sans-serif;
-        background: linear-gradient(90deg, #1a2a3b, #112233);
-        color: #ffffff;
+        background: linear-gradient(90deg, #0f172a, #1e293b); 
+        color: #d1d5db; 
     }
 
     h1 {
@@ -16,26 +16,30 @@
         margin-bottom: 20px;
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .card {
+        background-color: #1e293b; 
+        color: #d1d5db; 
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); 
     }
 
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
+    .card-header {
+        background-color: #2d3e50; 
+        color: #ffffff;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
     }
 
-    th {
-        background-color: #005b8f;
-        color: white;
+    .card-body {
+        padding: 20px;
     }
 
-    tr:hover {
-        background-color: #003f5f;
+    dl dt {
+        font-weight: bold;
+    }
+
+    dl dd {
+        margin-bottom: 15px;
     }
 
     .btn {
@@ -45,59 +49,77 @@
         border-radius: 10px;
         transition: all 0.3s ease;
         text-decoration: none;
-        color: white;
+        color: #d1d5db;
         display: inline-block;
         box-sizing: border-box;
         background-color: transparent;
+        border: 1px solid #d1d5db;
     }
 
         .btn:hover {
-            background-color: #005b8f;
-            color: white;
+            background-color: #2d3e50;
+            color: #ffffff;
             transform: scale(1.05);
         }
 
-    .btn-create {
-        background-color: #005b8f;
+    .btn-warning {
+        background-color: #ff7f50; 
+        border-color: #ff7f50;
     }
 
-        .btn-create:hover {
-            background-color: #003f5f;
-            transform: scale(1.05);
+        .btn-warning:hover {
+            background-color: #e68900;
+            border-color: #e68900;
         }
 
-    .text-right {
-        text-align: right;
+    .btn-secondary {
+        background-color: #4b5563; 
+        border-color: #4b5563;
+    }
+
+        .btn-secondary:hover {
+            background-color: #2d3e50;
+            border-color: #2d3e50;
+        }
+
+    .text-center {
+        text-align: center;
     }
 </style>
+
 <div class="container mt-5">
     <h1>Management Details</h1>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Gender</th>
-                <th>Department</th>
-                <th>Management Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>@Model.Id</td>
-                <td>@Model.Name</td>
-                <td>@Model.Email</td>
-                <td>@Model.PhoneNumber</td>
-                <td>@Model.Gender</td>
-                <td>@Model.Department</td>
-                <td>@Model.Type</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-body row">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
 
-    <a href="@Url.Action("Edit", "ManegmentAdmin", new { id = Model.Id })" class="btn btn-primary">Edit</a>
-    <a href="@Url.Action("Index", "UserManegment")" class="btn btn-secondary">Back to List</a>
+                <dt class="col-sm-3">Full Name</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+
+                <dt class="col-sm-3">Phone</dt>
+                <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+                <dt class="col-sm-3">Gender</dt>
+                <dd class="col-sm-9">@Model.Gender</dd>
+
+                <dt class="col-sm-3">Department</dt>
+                <dd class="col-sm-9">@Model.Department</dd>
+
+                <dt class="col-sm-3">Management Type</dt>
+                <dd class="col-sm-9">@Model.Type</dd>
+            </dl>
+
+            <div class="text-center mt-4">
+                <a asp-controller="ManegmentAdmin" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-controller="UserManegment" asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+            </div>
+        </div>
+    </div>
 </div>

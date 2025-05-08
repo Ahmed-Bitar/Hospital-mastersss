@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using Umbraco.Core.Models;
 using static MedicalPark.Models.Doctor;
 namespace MedicalPark.Controllers
 {
+    [Authorize(Roles = "Hospital Manager")]
+
     public class ManegmentAdminController : Controller
     {
         private readonly EmailVerificationService _emailService;
@@ -35,17 +38,7 @@ namespace MedicalPark.Controllers
             _logger = logger;
             _emailService = mailService;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var doctorsAndAdmines = await _userManager.GetUsersInRoleAsync("Doctor");
-            var Admines = await _userManager.GetUsersInRoleAsync("Nurse");
-            var Admin = await _userManager.GetUsersInRoleAsync("Admin");
-
-            var allDoctorsAndAdmines = doctorsAndAdmines.Concat(Admines).ToList();
-            return View(allDoctorsAndAdmines);
-
-        }
+       
         [HttpGet]
         public IActionResult SendVerificationCodeForAdmin()
         {
@@ -55,6 +48,7 @@ namespace MedicalPark.Controllers
         [HttpPost]
         public async Task<IActionResult> SendVerificationCodeForAdmin(string email)
         {
+            HttpContext.Session.SetString("AdminEmail", email);
 
             if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
             {
@@ -81,7 +75,6 @@ namespace MedicalPark.Controllers
                 TempData["AdmineVerificationCode"] = AdmineCode;
                 TempData["ManagerVerificationCodeAdmine"] = managerCode;
                 TempData["CodeGeneratedTimeAdmine"] = codeGeneratedTime;
-                TempData["Email"] = email;
 
                 return Json(new
                 {
@@ -112,10 +105,12 @@ namespace MedicalPark.Controllers
 
             if (string.IsNullOrEmpty(savedAdmineCode) || string.IsNullOrEmpty(savedManagerCode) || !codeGeneratedTime.HasValue)
             {
-                return Json(new { success = false, message = "Verification code has expired or is invalid." });
+                return RedirectToAction("SendVerificationCodeForAdmin", "ManegmentAdmin");
+
+
             }
 
-          
+
 
             if (AdmineCode == savedAdmineCode && managerCode == savedManagerCode)
             {
@@ -127,30 +122,20 @@ namespace MedicalPark.Controllers
 
                 });
             }
-            else
-            {
-                return Json(new 
-                {
-
-                    redirectUrl = Url.Action("VerifyAdminCodes", "ManegmentAdmin")
-
-
-                });
-            
-            
-            }
+            return View();
+           
         }
-
-
-
         [HttpGet]
         public async Task<IActionResult> RegisterAdmin()
         {
+          
             LoadViewBags();
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Hospital Manager")]
+
         public async Task<IActionResult> RegisterAdmin(AdminRegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -172,16 +157,17 @@ namespace MedicalPark.Controllers
 
                 if (result.Succeeded)
                 {
+
+
                     string roleName = "Admin";
-                    var roleExist = await _roleManager.RoleExistsAsync(roleName);
-                    if (!roleExist)
+
+                    if (!await _roleManager.RoleExistsAsync(roleName))
                     {
                         var role = new ApplicationRole(roleName);
                         await _roleManager.CreateAsync(role);
                     }
 
                     await _userManager.AddToRoleAsync(user, roleName);
-                    await _signInManager.SignInAsync(user, isPersistent: false);
 
                     return RedirectToAction("Index", "UserManegment");
                 }
@@ -193,22 +179,27 @@ namespace MedicalPark.Controllers
                     }
                 }
             }
+            HttpContext.Session.SetString("AdminEmail", model.Email);
 
+            ViewBag.email = model.Email;
 
             return View(model);
         }
+        [Authorize(Roles = "Hospital Manager")]
+
         [HttpGet]
         public async Task<IActionResult> EditAdmin(int id)
         {
             var manegmaent = await _context.Managements.FindAsync(id);
             if (manegmaent == null)
             {
-                return NotFound("Management not found.");
+                return NotFound("Admin not found.");
             }
 
             LoadViewBags();
             return View(manegmaent);
         }
+        [Authorize(Roles = "Hospital Manager")]
 
         [HttpPost]
         public async Task<IActionResult> EditAdmin(int id, AdminRegisterViewModel adminRegisterViewModel)
@@ -218,7 +209,7 @@ namespace MedicalPark.Controllers
                 var manegment = await _context.Managements.FindAsync(id);
                 if (manegment == null)
                 {
-                    return NotFound("Management not found.");
+                    return NotFound("Admin not found.");
                 }
 
                 manegment.Name = adminRegisterViewModel.FullName;
@@ -287,10 +278,12 @@ namespace MedicalPark.Controllers
         }
         private void LoadViewBags()
         {
+            var email = HttpContext.Session.GetString("AdminEmail");
+
             ViewBag.Departments = Enum.GetValues(typeof(Department)).Cast<Department>();
             ViewBag.ManegmentTypes = Enum.GetValues(typeof(ManegmentType)).Cast<ManegmentType>();
             ViewBag.Gender = new List<string> { "Female", "Male" };
-            ViewBag.email = TempData["Email"] as string;
+            ViewBag.email = email;
 
         }
     }

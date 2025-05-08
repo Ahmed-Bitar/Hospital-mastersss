@@ -41,15 +41,7 @@ namespace MedicalPark.Controllers
             _logger = logger;
             _emailService = mailService;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var doctorsAndNurses = await _userManager.GetUsersInRoleAsync("Doctor");
-            var nurses = await _userManager.GetUsersInRoleAsync("Nurse");
-            var allDoctorsAndNurses = doctorsAndNurses.Concat(nurses).ToList();
-            return View(allDoctorsAndNurses);
-
-        }
+      
         [HttpGet]
         public IActionResult SendVerificationCodeForDoctor()
         {
@@ -58,6 +50,8 @@ namespace MedicalPark.Controllers
         [HttpPost]
         public async Task<IActionResult> SendVerificationCodeForDoctor(string email)
         {
+            HttpContext.Session.SetString("DoctorEmail", email);
+
             if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
             {
                 return Json(new { success = false, message = "Invalid email address." });
@@ -82,7 +76,6 @@ namespace MedicalPark.Controllers
                 TempData["DoctorVerificationCode"] = doctorCode;
                 TempData["ManagerVerificationCodeDoctor"] = managerCode;
                 TempData["CodeGeneratedTimeDoctor"] = codeGeneratedTime;
-                TempData["Email"] = email;
 
                 return Json(new
                 {
@@ -141,7 +134,13 @@ namespace MedicalPark.Controllers
                                        .Cast<DoctorSpecialty>()
                                        .ToList();
 
-            ViewBag.email = TempData["Email"] as string;
+            var email = HttpContext.Session.GetString("DoctorEmail");
+
+            
+
+            ViewBag.email = email;
+            
+            
             return View();
         }
 
@@ -192,6 +191,10 @@ namespace MedicalPark.Controllers
                     }
                 }
             }
+
+            HttpContext.Session.SetString("DoctorEmail", model.Email);
+
+            ViewBag.email = model.Email;
             return View(model);
 
         }

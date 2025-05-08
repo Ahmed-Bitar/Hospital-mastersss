@@ -38,15 +38,7 @@ namespace MedicalPark.Controllers
             _logger = logger;
             _emailService = mailService;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var doctorsAndNurses = await _userManager.GetUsersInRoleAsync("Doctor");
-            var nurses = await _userManager.GetUsersInRoleAsync("Nurse");
-            var allDoctorsAndNurses = doctorsAndNurses.Concat(nurses).ToList();
-            return View(allDoctorsAndNurses);
-
-        }
+      
         [HttpGet]
         public IActionResult SendVerificationCodeNurse()
         {
@@ -153,6 +145,7 @@ namespace MedicalPark.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Hospital Manager")]
 
         [HttpPost]
         public async Task<IActionResult> RegisterNurse(NurseRegisterViewModel model)
@@ -197,6 +190,10 @@ namespace MedicalPark.Controllers
                     }
                 }
             }
+            HttpContext.Session.SetString("NurseEmail", model.Email);
+
+            ViewBag.email = model.Email;
+
 
             return View(model);
         }

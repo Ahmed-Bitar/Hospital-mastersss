@@ -56,26 +56,26 @@ namespace MedicalPark.Controllers
         [Authorize(Roles = "Hospital Manager")]
         public async Task<IActionResult> Delete(int id)
         {
-            var doctor = await _context.Doctors.FindAsync(id);
-            if (doctor == null)
+            var users = await _context.Users.FindAsync(id);
+            if (users == null)
             {
-                return NotFound("Doctor not found.");
+                return NotFound("Users not found.");
             }
 
-            return View(doctor);
+            return View(users);
         }
 
         [HttpPost]
         [Authorize(Roles = "Hospital Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var doctor = await _context.Doctors.FindAsync(id);
-            if (doctor == null)
+            var users = await _context.Users.FindAsync(id);
+            if (users == null)
             {
-                return NotFound($"Doctor with ID {id} not found.");
+                return NotFound($"Users with ID {id} not found.");
             }
 
-            _context.Doctors.Remove(doctor);
+            _context.Users.Remove(users);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", "UserManegment");
