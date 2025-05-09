@@ -42,11 +42,7 @@ using (var scope = app.Services.CreateScope())
 
     await context.SeedManagerRoleAndUser(roleManager, userManager);
     await context.DoctorRole(roleManager, userManager);
-    await context.DoctorRole2(roleManager, userManager);
-    await context.DoctorRole3(roleManager, userManager);
-    await context.patientRole(roleManager, userManager);
-    await context.patientRole2(roleManager, userManager);
-    await context.patientRole3(roleManager, userManager);
+
     await context.AdminRole(roleManager, userManager);
     await context.NurseRole(roleManager, userManager);
 

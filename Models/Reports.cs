@@ -59,9 +59,7 @@ namespace MedicalPark.Models
         public string? Description { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public string? PatientName { get; set; }
-        public string? DoctorName { get; set; }
-        public string? NurseName { get; set; }
+         public string UserName { get; set; }
         public ReportType ReportTypes { get; set; }
 
         public PatientReportType PatientReport { get; set; }
@@ -70,9 +68,9 @@ namespace MedicalPark.Models
         public EmergencyReportType EmergencyReport { get; set; }
         public VisitorReportType VisitorReport { get; set; }
 
+        public int UserId { get; set; }
 
 
 
-     
     }
 }

@@ -45,7 +45,7 @@ namespace MedicalPark.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Management,Doctor")]
+        [Authorize(Roles = "Admin,Doctor")]
         public async Task<IActionResult> Index()
         {
             var appointments = await _context.Appointments
@@ -57,7 +57,7 @@ namespace MedicalPark.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             await LoadDoctorAndPatientData();
@@ -65,7 +65,7 @@ namespace MedicalPark.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(Appointment appointments, AppointmentDto appointmentDto)
         {
             var doctorName = await _context.Doctors
@@ -127,10 +127,10 @@ namespace MedicalPark.Controllers
             _context.Appointments.Add(appointments);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(PatientIndex));
         }
         [HttpGet]
-        [Authorize(Roles = "admin,Patient")]
+        [Authorize(Roles = "Admin,Patient")]
         public async Task<IActionResult> Edit(int id)
         {
             var appointment = await _context.Appointments.FindAsync(id);
@@ -144,7 +144,7 @@ namespace MedicalPark.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin,Patient")]
+        [Authorize(Roles = "Admin,Patient")]
         public async Task<IActionResult> Edit(int id, AppointmentDto appointmentDto)
         {
             var appointment = await _context.Appointments.FindAsync(id);
@@ -162,7 +162,7 @@ namespace MedicalPark.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin,Doctor,Patient")]
+        [Authorize(Roles = "Admin,Doctor,Patient")]
         public async Task<IActionResult> Details(int id)
         {
             var appointment = await _context.Appointments
@@ -179,7 +179,7 @@ namespace MedicalPark.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin,Patient")]
+        [Authorize(Roles = "Admin,Patient")]
         public async Task<IActionResult> Delete(int id)
         {
             var appointment = await _context.Appointments
@@ -196,7 +196,7 @@ namespace MedicalPark.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var appointment = await _context.Appointments.FindAsync(id);
@@ -211,7 +211,7 @@ namespace MedicalPark.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
-        [Authorize(Roles = "admin,Patient")]
+        [Authorize(Roles = "Admin,Patient")]
         public async Task<IActionResult> PatientDelete(int id)
         {
             var appointment = await _context.Appointments.FindAsync(id);

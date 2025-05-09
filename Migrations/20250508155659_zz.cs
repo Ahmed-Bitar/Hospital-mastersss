@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MedicalPark.Migrations
 {
     /// <inheritdoc />
-    public partial class aa : Migration
+    public partial class zz : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,15 +76,14 @@ namespace MedicalPark.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PatientName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DoctorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NurseName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReportTypes = table.Column<int>(type: "int", nullable: false),
                     PatientReport = table.Column<int>(type: "int", nullable: false),
                     StaffReport = table.Column<int>(type: "int", nullable: false),
                     ManagementReport = table.Column<int>(type: "int", nullable: false),
                     EmergencyReport = table.Column<int>(type: "int", nullable: false),
-                    VisitorReport = table.Column<int>(type: "int", nullable: false)
+                    VisitorReport = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

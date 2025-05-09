@@ -82,5 +82,12 @@
     <div class="details-item">
         <strong>Closed Date:</strong> @(Model.ClosedDate.HasValue ? Model.ClosedDate.Value.ToString("yyyy-MM-dd HH:mm") : "Not Closed")
     </div>
+       @if (User.IsInRole("Admin"))
+        {
     <a asp-action="Index" class="btn">Back to List</a>
+        }
+    @if (User.IsInRole("Patient"))
+    {
+        <a asp-action="PatientIndex" class="btn">Back to List</a>
+    }
 </div>

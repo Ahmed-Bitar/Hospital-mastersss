@@ -15,9 +15,14 @@ namespace MedicalPark.Controllers
         private readonly HospitalDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public MedicalRecordsController(HospitalDbContext context)
+        public MedicalRecordsController(
+                 HospitalDbContext context,
+                 UserManager<ApplicationUser> userManager)
+
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         [Authorize(Roles = "Admin,Doctor,Nurse ")]
@@ -109,6 +114,8 @@ namespace MedicalPark.Controllers
         [Authorize(Roles = "Admin,Doctor,Nurse")]
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Doctor,Nurse")]
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var medicalRecord = await _context.MedicalRecords
@@ -121,27 +128,28 @@ namespace MedicalPark.Controllers
                 return NotFound($"Medical record with ID {id} not found.");
             }
 
-
-            var doctors = await _context.MedicalRecords
-                .Where(m => m.PatientId == medicalRecord.PatientId)
-                .Select(m => m.DoctorName)
-                .Distinct()
+            var prescriptions = await _context.Prescriptions
+                .Include(p => p.Doctor)
+                .Where(p => p.PatientID == medicalRecord.PatientId)
                 .ToListAsync();
 
+            var doctorMedicines = prescriptions
+                .GroupBy(p => p.Doctor.Name)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.SelectMany(p =>
+                            p.MedicalsName?
+                                .Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(m => m.Trim()) ?? new List<string>())
+                        .Distinct()
+                        .ToList()
+                );
 
-            var medicines = _context.Prescriptions
-                .Where(p => p.PatientID == medicalRecord.PatientId)
-                .AsEnumerable()
-                .SelectMany(p => p.MedicalsName.Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries))
-                .Distinct()
-                .ToList();
-
-
-            ViewBag.Doctors = doctors;
-            ViewBag.Medicines = medicines;
+            ViewBag.DoctorMedicines = doctorMedicines;
 
             return View(medicalRecord);
         }
+
         [Authorize(Roles = "Admin,Doctor,Nurse")]
         [HttpGet]
         public async Task<IActionResult> GetMedicalRecordsByPatientId(int patientId)

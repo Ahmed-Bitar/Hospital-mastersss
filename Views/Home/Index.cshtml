@@ -210,7 +210,6 @@
     </div>
     <div class="dropdown-menu">
         <a asp-controller="Account" asp-action="Profile">Profile</a>
-        <a asp-controller="Account" asp-action="ProfileUpdate">Update Profile</a>
         <form asp-controller="Account" asp-action="Logout" method="post" style="margin: 0;">
             <button type="submit">Logout</button>
         </form>
@@ -220,13 +219,27 @@
 <div class="container mt-5">
     <div class="text-center">
         <h1>Welcome to MedicalPark</h1>
-        <p class="lead">Manage your hospital resources, doctors, patients, and more with ease!</p>
+        <p class="lead">Manage your hospital resources</p>
     </div>
     <div class="row text-center mt-4">
-        @if ( User.IsInRole("Doctor") )
+        @if (User.IsInRole("Patient"))
         {
             <div class="col-md-4 col-sm-6 col-12">
-                <a asp-controller="Prescriptions" asp-action="Index" class="card-box">
+                <a asp-controller="MedicalRecords" asp-action="PatientIndex" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-notes-medical fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Medical Records</h5>
+                        <p>Access medical records</p>
+                    </div>
+                </a>
+            </div>
+        }
+        @if (User.IsInRole("Patient"))
+        {
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="Prescriptions" asp-action="PatientIndex" class="card-box">
                     <div class="icon-wrapper">
                         <i class="fas fa-file-prescription fa-2x"></i>
                     </div>
@@ -236,11 +249,10 @@
                     </div>
                 </a>
             </div>
-        } 
-        @if (User.IsInRole("Patient"))
+        }   @if (User.IsInRole("Doctor"))
         {
             <div class="col-md-4 col-sm-6 col-12">
-                <a asp-controller="Prescriptions" asp-action="PatientIndex" class="card-box">
+                <a asp-controller="Prescriptions" asp-action="DoctorIndex" class="card-box">
                     <div class="icon-wrapper">
                         <i class="fas fa-file-prescription fa-2x"></i>
                     </div>
@@ -266,29 +278,7 @@
                 </a>
             </div>
         }
-
-        
-    </div>  @if ( User.IsInRole("Patient"))
-    {
-        <div class="col-md-4 col-sm-6 col-12">
-            <a asp-controller="MedicalRecords" asp-action="Index" class="card-box">
-                <div class="icon-wrapper">
-                    <i class="fas fa-notes-medical fa-2x"></i>
-                </div>
-                <div class="content-wrapper">
-                    <h5>Medical Records</h5>
-                    <p>Access medical records</p>
-                </div>
-            </a>
-        </div>
-    }
-
-
-</div>
-
-
-    <div class="row text-center mt-4">
-        @if (User.IsInRole("Hospital Manager") )
+        @if (User.IsInRole("Hospital Manager"))
 
         {
 
@@ -308,7 +298,7 @@
 
 
 
-        @if (User.IsInRole("Doctor") || User.IsInRole("Admin") )
+        @if (User.IsInRole("Doctor") || User.IsInRole("Admin") || User.IsInRole("Nurs"))
         {
             <div class="col-md-4 col-sm-6 col-12">
                 <a asp-controller="Appointment" asp-action="Index" class="card-box">
@@ -321,7 +311,8 @@
                     </div>
                 </a>
             </div>
-        }  @if ( User.IsInRole("Patient") )
+        }
+        @if (User.IsInRole("Patient"))
         {
             <div class="col-md-4 col-sm-6 col-12">
                 <a asp-controller="Appointment" asp-action="PatientIndex" class="card-box">
@@ -335,9 +326,9 @@
                 </a>
             </div>
         }
-        
 
-        @if (User.IsInRole("Management") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse") )
+
+        @if (User.IsInRole("Hospital Manager"))
         {
             <div class="col-md-4 col-sm-6 col-12">
                 <a asp-controller="Reports" asp-action="Index" class="card-box">
@@ -350,12 +341,25 @@
                     </div>
                 </a>
             </div>
-
-           
+        }@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse"))
+        {
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="Reports" asp-action="UserIndex" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-flag fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Reports</h5>
+                        <p>Generate hospital reports</p>
+                    </div>
+                </a>
+            </div>
         }
-    </div>
-
+    </div> 
 </div>
+
+
+   
 
 <footer class="footer">
     <div class="container text-center">

@@ -7,104 +7,82 @@
         font-family: 'Poppins', sans-serif;
         background: linear-gradient(90deg, #1a2a3b, #112233);
         color: #ffffff;
+        padding: 40px 20px;
     }
 
     h1 {
         color: #00b0ff;
         text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+    }
+
+    .details-container {
+        background-color: #1e2f40;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 700px;
+        margin: 0 auto;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .details-item {
         margin-bottom: 20px;
+        font-size: 1.2rem;
+        padding: 15px;
+        border-left: 4px solid #00b0ff;
+        background-color: #263544;
+        border-radius: 8px;
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #005b8f;
-        color: white;
-    }
-
-    tr:hover {
-        background-color: #003f5f;
-    }
+        .details-item strong {
+            color: #81c7e0;
+            margin-right: 10px;
+        }
 
     .btn {
         font-size: 16px;
         font-weight: 600;
-        padding: 12px 20px;
+        padding: 12px 24px;
         border-radius: 10px;
         transition: all 0.3s ease;
         text-decoration: none;
         color: white;
-        display: inline-block;
-        box-sizing: border-box;
-        width: auto;
-    }
-
-    .btn-create {
         background-color: #005b8f;
+        display: inline-block;
+        margin-top: 20px;
     }
 
-        .btn-create:hover {
+        .btn:hover {
             background-color: #003f5f;
             transform: scale(1.05);
         }
 
-    .btn-edit {
-        background-color: #28a745;
-    }
-
-        .btn-edit:hover {
-            background-color: #218838;
-            transform: scale(1.05);
-        }
-
-    .btn-delete {
-        background-color: #dc3545;
-    }
-
-        .btn-delete:hover {
-            background-color: #c82333;
-            transform: scale(1.05);
-        }
-
-    .btn-details {
-        background-color: #007bff;
-    }
-
-        .btn-details:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-    .text-right {
-        text-align: right;
+    .text-center {
+        text-align: center;
     }
 </style>
 
 <div class="details-container">
     <h1>Report Details</h1>
+
     <div class="details-item">
         <strong>ID:</strong> @Model.Id
     </div>
+
     <div class="details-item">
-        <strong>Reporter Name:</strong> @Model.ReportTypes.ToString();
+        <strong>Reporter Name:</strong> @Model.ReportTypes.ToString()
     </div>
+
     <div class="details-item">
         <strong>Report Type:</strong> @Model.ReportTypes
     </div>
-    
+
     <div class="details-item">
         <strong>Reported On:</strong> @Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")
     </div>
-    <a asp-action="Index" class="btn">Back to List</a>
+
+    <div class="text-center">
+        <a asp-action="Index" class="btn">← Back to List</a>
+    </div>
 </div>

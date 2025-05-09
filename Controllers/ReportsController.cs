@@ -4,20 +4,41 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using MedicalPark.Dbcontext;
 using MedicalPark.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace MedicalPark.Controllers
 {
-    [Authorize(Roles = "Management,Patient,Nurse,Doctor,AllRole")]
+    [Authorize(Roles = "Admin,Patient,Nurse,Doctor,Hospital Manager")]
+
 
     public class ReportsController : Controller
     {
         private readonly HospitalDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ReportsController(HospitalDbContext context)
+
+        public ReportsController(
+            HospitalDbContext context,
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
-        [Authorize(Roles = "Management,Patient,Nurse,Doctor")]
+
+
+        [Authorize(Roles = " Patient,Nurse,Doctor,Admin")]
+        [HttpGet]
+        public async Task<IActionResult> UserIndex()
+        {
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            var reports = await _context.Reports
+                .Where(r => r.Id == currentUser.Id)
+                .ToListAsync();
+            return View(reports);
+        }
+        [Authorize(Roles = "Hospital Manager")]
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -37,7 +58,7 @@ namespace MedicalPark.Controllers
 
             return View(reports);
         }
-        [Authorize(Roles = "Management,Patient,Nurse,Doctor")]
+        [Authorize(Roles = "Admin,Patient,Nurse,Doctor")]
 
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -51,7 +72,7 @@ namespace MedicalPark.Controllers
 
             return View(new Report());
         }
-        [Authorize(Roles = "Management,Patient,Nurse,Doctor")]
+        [Authorize(Roles = "Admin,Patient,Nurse,Doctor")]
 
         [HttpPost]
         public async Task<IActionResult> Create(Report report, ReportDto reportDto)
@@ -75,15 +96,21 @@ namespace MedicalPark.Controllers
                     ViewBag.VisitorReports = Enum.GetValues(typeof(Report.VisitorReportType)).Cast<Report.VisitorReportType>().ToList();
                     break;
             }
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null || currentUser is not Patient patientUser)
+            {
+                Console.WriteLine("aaaaaaaaaaaaaaaaaa");
+            }
             report.Description = reportDto.Description;
-
+            report.UserId = currentUser.Id;
+            report.UserName = currentUser.Name;
             report.CreatedDate = DateTime.Now;
             _context.Reports.Add(report);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(UserIndex));
         }
-        [Authorize(Roles = "Management,Patient,Nurse,Doctor")]
+        [Authorize(Roles = "Admin,Patient,Nurse,Doctor")]
 
         public async Task<IActionResult> Details(int id)
         {
@@ -98,7 +125,7 @@ namespace MedicalPark.Controllers
 
             return View(report);
         }
-        [Authorize(Roles = "Management,Patient,Nurse,Doctor")]
+        [Authorize(Roles = "Admin,Patient,Nurse,Doctor")]
 
         public async Task<IActionResult> Edit(int id)
         {
@@ -110,7 +137,7 @@ namespace MedicalPark.Controllers
 
             return View(report);
         }
-        [Authorize(Roles = "Management,Patient,Nurse,Doctor")]
+        [Authorize(Roles = "Admin,Patient,Nurse,Doctor")]
 
         [HttpPost]
         public async Task<IActionResult> Edit(int id, Report report)
@@ -131,11 +158,11 @@ namespace MedicalPark.Controllers
                 {
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(UserIndex));
             }
             return View(report);
         }
-        [Authorize(Roles = "Management,Patient,Nurse,Doctor")]
+        [Authorize(Roles = "Admin,Patient,Nurse,Doctor")]
 
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
@@ -154,8 +181,8 @@ namespace MedicalPark.Controllers
 
             return View(report);
         }
-        [Authorize(Roles = "Management,Patient,Nurse,Doctor")]
- 
+        [Authorize(Roles = "Admin,Patient,Nurse,Doctor")]
+
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -165,7 +192,7 @@ namespace MedicalPark.Controllers
             await _context.SaveChangesAsync();
 
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(UserIndex));
         }
 
 

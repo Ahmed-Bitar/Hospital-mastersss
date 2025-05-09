@@ -1,122 +1,68 @@
 ﻿@model MedicalPark.Models.MedicalRecord
 
-<h2>Details for @Model.PationName</h2>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(90deg, #1a2a3b, #112233);
-        color: #ffffff;
-    }
-
-    h1 {
-        color: #00b0ff;
-        text-align: center;
+    .doctor-section {
         margin-bottom: 20px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #005b8f;
-        color: white;
-    }
-
-    tr:hover {
-        background-color: #003f5f;
-    }
-
-    .btn {
-        font-size: 16px;
-        font-weight: 600;
-        padding: 12px 20px;
+        background-color: #243447;
+        padding: 15px;
         border-radius: 10px;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        color: white;
-        display: inline-block;
-        box-sizing: border-box;
-        width: auto;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
-    .btn-create {
-        background-color: #005b8f;
-    }
-
-        .btn-create:hover {
-            background-color: #003f5f;
-            transform: scale(1.05);
+        .doctor-section h4 {
+            color: #00b0ff;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
 
-    .btn-edit {
-        background-color: #28a745;
+    .medicine-list {
+        list-style: none;
+        padding-left: 0;
     }
 
-        .btn-edit:hover {
-            background-color: #218838;
-            transform: scale(1.05);
+        .medicine-list li {
+            padding: 8px;
+            background-color: #2c3e50;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
         }
 
-    .btn-delete {
-        background-color: #dc3545;
-    }
-
-        .btn-delete:hover {
-            background-color: #c82333;
-            transform: scale(1.05);
-        }
-
-    .btn-details {
-        background-color: #007bff;
-    }
-
-        .btn-details:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-    .text-right {
-        text-align: right;
-    }
+            .medicine-list li i {
+                color: #00b0ff;
+                margin-right: 10px;
+            }
 </style>
-<div>
 
-    <h4>Medical Record</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Patient Name</dt>
-        <dd class="col-sm-10">@Model.PationName</dd>
+<h2>Medical Record for @Model.PationName</h2>
 
-        <dt class="col-sm-2">Doctor Names</dt>
-        <dd class="col-sm-10">
-            @foreach (var doctor in ViewBag.Doctors)
+
+<div class="record-content">
+    <div class="record-label">Prescribed Medications</div>
+    <div class="record-value">
+        @if (ViewBag.DoctorMedicines != null)
+        {
+            foreach (var entry in (Dictionary<string, List<string>>)ViewBag.DoctorMedicines)
             {
-                @doctor <br />
+                <div class="doctor-section">
+                    <h4>@entry.Key</h4>
+                    <ul class="medicine-list">
+                        @foreach (var med in entry.Value)
+                        {
+                            <li><i class="fas fa-pills"></i> @med</li>
+                        }
+                    </ul>
+                </div>
             }
-        </dd>
-
-        <dt class="col-sm-2">Medicals</dt>
-        <dd class="col-sm-10">
-            @foreach (var medicine in ViewBag.Medicines)
-            {
-                @medicine <br />
-            }
-        </dd>
-    </dl>
-</div>
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+        }
+        else
+        {
+            <p>No medications found.</p>
+        }
+    </div>
 </div>

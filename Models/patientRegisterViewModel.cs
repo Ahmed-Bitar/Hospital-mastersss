@@ -39,5 +39,9 @@ namespace MedicalPark.Models
         [Required]
         [Display(Name = "Address")]
         public string Adres { get; set; }
+        [Required]
+        [Display(Name = "Email")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        public string Email { get; set; }
     }
 }

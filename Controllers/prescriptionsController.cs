@@ -4,23 +4,47 @@ using System.Threading.Tasks;
 using MedicalPark.Models;
 using Microsoft.AspNetCore.Authorization;
 using MedicalPark.Dbcontext;
-using MedicalPark.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace MedicalPark.Controllers
 {
-    [Authorize(Roles = "Doctor,Patient")]
-
+    [Authorize(Roles = "Doctor,Patient,Admin")]
     public class PrescriptionsController : Controller
     {
         private readonly HospitalDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public PrescriptionsController(HospitalDbContext context)
+        public PrescriptionsController(
+                 HospitalDbContext context,
+                 UserManager<ApplicationUser> userManager)
+
         {
             _context = context;
+            _userManager = userManager;
+
+        }
+        [Authorize(Roles = "Doctor")]
+        [HttpGet]
+        public async Task<IActionResult> DoctorIndex()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null || !(currentUser is Doctor doctorUser))
+            {
+                return Unauthorized("Only doctors can access this page.");
+            }
+
+            var prescriptionsList = await _context.Prescriptions
+                    .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                    .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+                    .Where(m => m.DoctorID == doctorUser.Id)
+                    .ToListAsync();
+
+            return View(prescriptionsList);
         }
         [Authorize(Roles = "Patient")]
+        [HttpGet]
         public async Task<IActionResult> PatientIndex()
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -28,48 +52,42 @@ namespace MedicalPark.Controllers
             {
                 Console.WriteLine("aaaaaaaaaaaaaaaaaa");
             }
-            var prescriptionsList = await _context.Prescriptions
-                .Include(p => p.Appointment)
-                    .ThenInclude(a => a.Doctor)
-                .Include(p => p.Appointment)
-                    .ThenInclude(a => a.Patient)
-               .Where(m => m.PatientID == currentUser.Id)
 
-                .ToListAsync();
+            var prescriptionsList = await _context.Prescriptions
+                    .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                    .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Patient)
+                    .Where(m => m.PatientID == currentUser.Id)
+                    .ToListAsync();
 
             return View(prescriptionsList);
         }
 
-        [Authorize(Roles = "Management,Doctor")]
 
-        public async Task<IActionResult> Index()
-        {
-            var prescriptionsList = await _context.Prescriptions
-                .Include(p => p.Appointment)
-                    .ThenInclude(a => a.Doctor)
-                .Include(p => p.Appointment)
-                    .ThenInclude(a => a.Patient)
-                .ToListAsync();
 
-            return View(prescriptionsList);
-        }
         [Authorize(Roles = "Doctor")]
-
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null || !(currentUser is Doctor doctorUser))
+            {
+                return Unauthorized("Only doctors can create prescriptions.");
+            }
+
             var availableAppointments = await _context.Appointments
                 .Include(a => a.Doctor)
                 .Include(a => a.Patient)
-                .Where(a => a.Prescription == null)
+                .Where(a => a.Prescription == null && a.DoctorId == doctorUser.Id)
                 .ToListAsync();
 
             ViewBag.Appointments = availableAppointments;
 
             return View(new Prescription());
         }
-        [Authorize(Roles = "Doctor")]
 
+        [Authorize(Roles = "Doctor")]
         [HttpPost]
         public async Task<IActionResult> Create(PrescriptionDto prescriptionDto, int appointmentId)
         {
@@ -98,10 +116,12 @@ namespace MedicalPark.Controllers
             _context.Prescriptions.Add(prescription);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(DoctorIndex));
         }
 
-          [HttpGet]
+        [Authorize(Roles = "Doctor")]
+
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var appointments = await _context.Appointments
@@ -123,8 +143,8 @@ namespace MedicalPark.Controllers
 
             return View(prescription);
         }
-        [Authorize(Roles = "Doctor")]
 
+        [Authorize(Roles = "Doctor")]
         [HttpPost]
         public async Task<IActionResult> Edit(int id, PrescriptionDto prescriptionDto)
         {
@@ -158,12 +178,11 @@ namespace MedicalPark.Controllers
             _context.Update(prescription);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(DoctorIndex));
         }
 
-
         [HttpGet]
-        [Authorize(Roles = "Management,Patient,Doctor")]
+        [Authorize(Roles = "Patient,Doctor")]
         public async Task<IActionResult> Details(int id)
         {
             var prescription = await _context.Prescriptions
@@ -180,7 +199,6 @@ namespace MedicalPark.Controllers
             return View(prescription);
         }
 
-
         [Authorize(Roles = "Doctor")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
@@ -188,21 +206,19 @@ namespace MedicalPark.Controllers
             var prescription = await _context.Prescriptions
                 .FirstOrDefaultAsync(a => a.Id == id);
 
-
             return View(prescription);
         }
-        [Authorize(Roles = "Doctor")]
 
+        [Authorize(Roles = "Doctor")]
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var Presepriction = await _context.Prescriptions.FindAsync(id);
 
-
             _context.Prescriptions.Remove(Presepriction);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(DoctorIndex));
         }
     }
 }

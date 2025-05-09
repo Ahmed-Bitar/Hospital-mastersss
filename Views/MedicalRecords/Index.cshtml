@@ -5,82 +5,89 @@
 
 <style>
     body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(90deg, #1a2a3b, #112233);
-        color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(90deg, #1a2a3b, #112233);
+    color: #ffffff;
     }
 
     h1 {
-        color: #00b0ff;
-        text-align: center;
-        margin-bottom: 20px;
+    color: #00b0ff;
+    text-align: center;
+    margin-bottom: 20px;
     }
 
     table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
     }
 
     th {
-        background-color: #005b8f;
-        color: white;
+    background-color: #005b8f;
+    color: white;
     }
 
     tr:hover {
-        background-color: #003f5f;
+    background-color: #003f5f;
     }
 
     .btn {
-        font-size: 16px;
-        font-weight: 600;
-        padding: 12px 20px;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        color: white;
-        display: inline-block;
-        box-sizing: border-box;
-        background-color: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+    box-sizing: border-box;
+    background-color: transparent;
     }
 
-        .btn:hover {
-            background-color: #005b8f;
-            color: white;
-            transform: scale(1.05);
-        }
+    .btn:hover {
+    background-color: #005b8f;
+    color: white;
+    transform: scale(1.05);
+    }
 
     .btn-create {
-        background-color: #005b8f;
+    background-color: #005b8f;
     }
 
-        .btn-create:hover {
-            background-color: #003f5f;
-            transform: scale(1.05);
-        }
+    .btn-create:hover {
+    background-color: #003f5f;
+    transform: scale(1.05);
+    }
 
     .text-right {
-        text-align: right;
+    text-align: right;
     }
 </style>
 
 <div class="container mt-5">
-    <h2>Medical Records</h2>
-     @if (User.IsInRole("Admin"))
-        {
-    <div class="text-right mb-3">
-        <a asp-action="Create" class="btn btn-primary">+ Add New Medical Record</a>
-    </div>
-        <a href="@Url.Action("Index", "Home")" class="btn btn-create" style="background-color: #005b8f; margin-left:10px;">Back</a>
+    <h1 class="text-center">Medical Records</h1>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="text-right mb-3">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-create" style="background-color: #005b8f; margin-left:10px;">Back</a>
 
-        }
+            <a asp-action="Create" class="btn btn-primary">+ Add New Medical Record</a>
+        </div>
+        
+    }
+    @if (User.IsInRole("Doctor") || User.IsInRole("Patient"))
+    {
+            <div class="text-right mb-3">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-create" style="background-color: #005b8f; margin-left:10px;">Back</a>
+    </div>
+    }
     <table>
         <thead>
             <tr>
@@ -102,7 +109,7 @@
                     <td>@doctorNames</td>
                     <td>@medicals</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@firstRecord.Id" class="btn btn-details">Details</a> |
+                        <a asp-action="Details" asp-route-id="@firstRecord.Id" class="btn btn-details">Details</a> 
                    
                     </td>
                 </tr>

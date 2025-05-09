@@ -113,6 +113,11 @@
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" value="@ViewBag.email" disabled />
+            <input type="hidden" name="Email" value="@ViewBag.email" />
+        </div>
 
         <div class="form-group">
             <label asp-for="PhoneNumber"></label>

@@ -301,20 +301,11 @@ namespace MedicalPark.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DoctorName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("EmergencyReport")
                         .HasColumnType("int");
 
                     b.Property<int>("ManagementReport")
                         .HasColumnType("int");
-
-                    b.Property<string>("NurseName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PatientName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PatientReport")
                         .HasColumnType("int");
@@ -324,6 +315,13 @@ namespace MedicalPark.Migrations
 
                     b.Property<int>("StaffReport")
                         .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("VisitorReport")
                         .HasColumnType("int");

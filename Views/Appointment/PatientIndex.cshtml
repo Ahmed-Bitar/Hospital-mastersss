@@ -106,7 +106,7 @@
                         <a asp-action="Details" asp-route-id="@appointment.Id" class="btn btn-details">Details</a>
 
 
-                        <form asp-action="DeleteConfirmed" asp-route-id="@appointment.Id" method="post" style="display:inline;">
+                        <form asp-action="PatientDelete" asp-route-id="@appointment.Id" method="post" style="display:inline;">
                                 <button type="submit" class="btn btn-delete">Delete</button>
                             </form>
 

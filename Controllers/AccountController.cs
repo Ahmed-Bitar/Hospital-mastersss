@@ -57,7 +57,7 @@ namespace MedicalPark.Controllers
         [HttpPost]
         public async Task<IActionResult> SendVerificationCode(string email)
         {
-            TempData["Email"] = email;
+            HttpContext.Session.SetString("PatientEmail", email);
 
             if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
             {
@@ -155,6 +155,11 @@ namespace MedicalPark.Controllers
         [HttpGet]
         public IActionResult RegisterPationt()
         {
+            var email = HttpContext.Session.GetString("PatientEmail");
+
+
+
+            ViewBag.email = email;
             return View();
         }
 
@@ -163,14 +168,13 @@ namespace MedicalPark.Controllers
         public async Task<IActionResult> RegisterPationt(patientRegisterViewModel model)
         {
             if (ModelState.IsValid) { 
-                var email = TempData["Email"] as string;
                 string roleName = "Patient";
 
                 var user = new Patient()
                 {
                     Name = model.Name,
                     UserName = model.Name.Replace(" ", ""),
-                    Email = email,
+                    Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     Gender=model.Gender,
                     UserType = model.UserType,
@@ -205,8 +209,10 @@ namespace MedicalPark.Controllers
                 }
             }
             else { Console.WriteLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaa"); }
-           
 
+            HttpContext.Session.SetString("DoctorEmail", model.Email);
+
+            ViewBag.email = model.Email;
             return View(model);
         }
         [Authorize(Roles = "Patient,AllRole")]

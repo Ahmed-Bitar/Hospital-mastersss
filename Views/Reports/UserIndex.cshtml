@@ -75,7 +75,9 @@
 <div class="container mt-5">
     <h1 class="text-center">Reports</h1>
     <div class="text-right mb-3">
+        <a href="@Url.Action("Create")" class="btn btn-primary">+ Create New Report</a>
         <a href="@Url.Action("Index", "Home")" class="btn btn-create" style="background-color: #005b8f; margin-left:10px;">Back</a>
+
     </div>
     <table>
         <thead>
@@ -92,7 +94,10 @@
                     <td>@Enum.GetName(typeof(Report.ReportType), report.ReportTypes)</td>
                     <td>@report.CreatedDate</td>
                     <td>
+                        <a href="@Url.Action("Edit", new { id = report.Id })" class="btn btn-edit">Edit</a>
                         <a href="@Url.Action("Details", new { id = report.Id })" class="btn btn-details">Details</a>
+                        <a href="@Url.Action("Delete", new { id = report.Id })" class="btn btn-delete">Delete</a>
+
                     </td>
                 </tr>
             }

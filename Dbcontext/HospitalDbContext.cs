@@ -91,7 +91,7 @@ namespace MedicalPark.Dbcontext
                     Name = "Ahmad Bitar",
                     Email = "ahmad.w.bitar@gmail.com",
                     PhoneNumber = "123456789",
-                    UserType = "Hospital Management",
+                    UserType = "Hospital Manager",
                 };
                 string Password = "Ahmad@ab12";
                 var result = await userManager.CreateAsync(user, Password);
@@ -122,6 +122,9 @@ namespace MedicalPark.Dbcontext
                     Email = "Doctor@gmail.com",
                     PhoneNumber = "123456789",
                     UserType = " Doctor",
+
+
+
                 };
                 string Password = "Ahmad@ab12";
                 var result = await userManager.CreateAsync(user, Password);
@@ -131,154 +134,7 @@ namespace MedicalPark.Dbcontext
                 }
             }
         }
-        public async Task DoctorRole2(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            var role = await roleManager.FindByNameAsync("Doctor");
-            if (role == null)
-            {
-                role = new ApplicationRole("Doctor");
-                await roleManager.CreateAsync(role);
-            }
-
-            var user = await userManager.FindByEmailAsync("Doctor22222@gmail.comm");
-            if (user == null)
-            {
-                user = new Doctor
-                {
-                    UserName = "Doctor22222",
-                    Gender = "Male",
-                    Name = "Doctor22222",
-                    Email = "Doctor22222@gmail.com",
-                    PhoneNumber = "123456789",
-                    UserType = " Doctor22222",
-                };
-                string Password = "Ahmad@ab12";
-                var result = await userManager.CreateAsync(user, Password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Doctor");
-                }
-            }
-        }
-        public async Task DoctorRole3(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            var role = await roleManager.FindByNameAsync("Doctor");
-            if (role == null)
-            {
-                role = new ApplicationRole("Doctor");
-                await roleManager.CreateAsync(role);
-            }
-
-            var user = await userManager.FindByEmailAsync("Doctor333333@gmail.comm");
-            if (user == null)
-            {
-                user = new Doctor
-                {
-                    UserName = "Doctor333333",
-                    Gender = "Male",
-                    Name = "Doctor333333",
-                    Email = "Doctor333333@gmail.com",
-                    PhoneNumber = "123456789",
-                    UserType = " Doctor333333",
-                };
-                string Password = "Ahmad@ab12";
-                var result = await userManager.CreateAsync(user, Password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Doctor");
-                }
-            }
-        }
-        public async Task patientRole(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            var role = await roleManager.FindByNameAsync("Patient");
-            if (role == null)
-            {
-                                            
-                role = new ApplicationRole("Patient");
-                await roleManager.CreateAsync(role);
-            }
-
-            var user = await userManager.FindByEmailAsync("Patient111111@gmail.com");
-            if (user == null)
-            {
-                user = new Patient
-                {
-                    UserName = "Patient111111",
-                    Gender = "Male",
-                    Name = "Patient111111",
-                    Email = "Patient111111@gmail.com",
-                    PhoneNumber = "123456789",
-                    UserType = " Patient111111",
-                };
-                string Password = "Ahmad@ab12";
-                var result = await userManager.CreateAsync(user, Password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Patient");
-                }
-            }
-        }
-        public async Task patientRole3(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            var role = await roleManager.FindByNameAsync("Patient");
-            if (role == null)
-            {
-                role = new ApplicationRole("Patient");
-                await roleManager.CreateAsync(role);
-            }
-
-            var user = await userManager.FindByEmailAsync("Patient33333@gmail.com");
-            if (user == null)
-            {
-                user = new Patient
-                {
-                    UserName = "Patient33333",
-                    Gender = "Male",
-                    Name = "Patient33333",
-                    Email = "Patient33333@gmail.com",
-                    PhoneNumber = "123456789",
-                    UserType = " Patient33333",
-                };
-                string Password = "Ahmad@ab12";
-                var result = await userManager.CreateAsync(user, Password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Patient");
-                }
-            }
-        }
-
-        public async Task patientRole2(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            var role = await roleManager.FindByNameAsync("Patient");
-            if (role == null)
-            {
-                role = new ApplicationRole("Patient");
-                await roleManager.CreateAsync(role);
-            }
-
-            var user = await userManager.FindByEmailAsync("Patient22222222@gmail.comm");
-            if (user == null)
-            {
-                user = new Patient
-                {
-                    UserName = "Patient22222222",
-                    Gender = "Male",
-                    Name = "Patient2222222222",
-                    Email = "Patient22222222@gmail.com",
-                    PhoneNumber = "123456789",
-                    UserType = " Patient2222222222",
-                };
-                string Password = "Ahmad@ab12";
-                var result = await userManager.CreateAsync(user, Password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Patient");
-                }
-            }
-
-        }
+      
         public async Task AdminRole(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             var role = await roleManager.FindByNameAsync("Admin");
