@@ -34,7 +34,7 @@ namespace MedicalPark.Controllers
 
             var currentUser = await _userManager.GetUserAsync(User);
             var reports = await _context.Reports
-                .Where(r => r.Id == currentUser.Id)
+                .Where(r => r.UserId == currentUser.Id)
                 .ToListAsync();
             return View(reports);
         }
@@ -142,26 +142,43 @@ namespace MedicalPark.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int id, Report report)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null || currentUser is not Patient patientUser)
+            {
+                Console.WriteLine("aaaaaaaaaaaaaaaaaa");
+            }
             if (id != report.Id)
             {
                 return NotFound();
             }
 
+            var name = currentUser.Name.ToString();
+            report.UserName = name;
+
             if (ModelState.IsValid)
             {
-                try
+                
+                _context.Update(report);
+                var changesSaved = await _context.SaveChangesAsync();
+                
+                if (changesSaved > 0)
                 {
-                    _context.Update(report);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(UserIndex));
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, "the saved eror please try again .");
                 }
-                return RedirectToAction(nameof(UserIndex));
             }
+
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                Console.WriteLine(error.ErrorMessage);
+            }
+
             return View(report);
         }
+
         [Authorize(Roles = "Admin,Patient,Nurse,Doctor")]
 
         [HttpGet]

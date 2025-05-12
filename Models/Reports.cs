@@ -64,7 +64,7 @@ namespace MedicalPark.Models
 
         public PatientReportType PatientReport { get; set; }
         public StaffReportType StaffReport { get; set; }
-        public ManagementReportType ManagementReport { get; set; }
+        public ManagementReportType ManagementReport { get; set; } 
         public EmergencyReportType EmergencyReport { get; set; }
         public VisitorReportType VisitorReport { get; set; }
 

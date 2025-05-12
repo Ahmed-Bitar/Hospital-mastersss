@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MedicalPark.Migrations
 {
     /// <inheritdoc />
-    public partial class zz : Migration
+    public partial class aa : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

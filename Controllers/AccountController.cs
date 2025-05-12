@@ -215,44 +215,7 @@ namespace MedicalPark.Controllers
             ViewBag.email = model.Email;
             return View(model);
         }
-        [Authorize(Roles = "Patient,AllRole")]
-        [HttpGet]
-        public async Task<IActionResult> MedicalRecordsByPatient( )
-        {
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null || currentUser is not Patient patientUser)
-            {
-                Console.WriteLine("aaaaaaaaaaaaaaaaaa");
-            }
-            var medicalRecords = await _context.MedicalRecords
-                .Include(m => m.Patient)
-                .Include(m => m.Doctor)
-                .Where(m => m.PatientId == currentUser.Id)
-                .ToListAsync();
-
-            if (medicalRecords == null || !medicalRecords.Any())
-            {
-                return NotFound($"No medical records noutfound foundD ");
-            }
-
-            return View(medicalRecords); 
-        }
-        [Authorize(Roles = "Doctor,Patient,Management")]
-        public async Task<IActionResult> PatientPrescriptions()
-        {
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null || currentUser is not Patient patientUser)
-            {
-                Console.WriteLine("aaaaaaaaaaaaaaaaaa");
-            }
-            var prescriptions = await _context.Prescriptions
-             .Include(p => p.Doctor)
-             .Include(p => p.Appointment)
-             .Where(p => p.PatientID == currentUser.Id)
-             .ToListAsync();
-
-            return View("PrescriptionsList", prescriptions);
-        }
+       
 
         [HttpGet]
         public IActionResult Login()
