@@ -1,0 +1,85 @@
+﻿@model MedicalPark.Models.SurgicalOperation
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Start Operation</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #121b2b;
+            color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #1f2a44;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #0b66ff88;
+            text-align: center;
+            width: 350px;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #0b66ff;
+        }
+
+        button {
+            background: linear-gradient(135deg, #0b66ff, #1a8cff);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+            button:hover {
+                background: linear-gradient(135deg, #1a8cff, #0b66ff);
+            }
+
+        .message {
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        .success {
+            color: #4caf50;
+        }
+
+        .error {
+            color: #ff5252;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Start Operation</h2>
+        <p><strong>Operation Name:</strong> @Model.Name</p>
+        <p><strong>Scheduled Time:</strong> @Model.OperationStartTime.ToString("g")</p>
+
+        <form asp-action="StartOperation" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit">Start Operation Now</button>
+        </form>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="message success">@TempData["Success"]</div>
+        }
+        else if (TempData["Error"] != null)
+        {
+            <div class="message error">@TempData["Error"]</div>
+        }
+    </div>
+</body>
+</html>

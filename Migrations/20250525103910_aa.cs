@@ -43,7 +43,10 @@ namespace MedicalPark.Migrations
                     Specialty = table.Column<int>(type: "int", nullable: true),
                     Salery = table.Column<int>(type: "int", nullable: true),
                     PatientID = table.Column<int>(type: "int", nullable: true),
+                    ConditionJoind = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JoindedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     Salary = table.Column<int>(type: "int", nullable: true),
+                    HistoryOfIllness = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: true),
                     Adres = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BloodType = table.Column<int>(type: "int", nullable: true),
@@ -88,6 +91,32 @@ namespace MedicalPark.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reports", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rooms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoomName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoomType = table.Column<int>(type: "int", nullable: false),
+                    PatientRoomSection = table.Column<int>(type: "int", nullable: false),
+                    OperatingRoomSection = table.Column<int>(type: "int", nullable: false),
+                    EmergencyRoomSection = table.Column<int>(type: "int", nullable: false),
+                    IntensiveCareUnitSection = table.Column<int>(type: "int", nullable: false),
+                    ExaminationRoomSection = table.Column<int>(type: "int", nullable: false),
+                    DeliveryRoomSection = table.Column<int>(type: "int", nullable: false),
+                    SterilizationRoomSection = table.Column<int>(type: "int", nullable: false),
+                    WaitingRoomSection = table.Column<int>(type: "int", nullable: false),
+                    ConsultationRoomSection = table.Column<int>(type: "int", nullable: false),
+                    RecoveryRoomSection = table.Column<int>(type: "int", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
+                    IsSterile = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rooms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,6 +281,35 @@ namespace MedicalPark.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Invoices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PatientId = table.Column<int>(type: "int", nullable: false),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Invoices_AspNetUsers_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Invoices_AspNetUsers_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MedicalRecords",
                 columns: table => new
                 {
@@ -278,6 +336,62 @@ namespace MedicalPark.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SurgicalOperations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    SurgeryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    CostOfOperation = table.Column<int>(type: "int", nullable: false),
+                    PatientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoctorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NurseName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoomName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    NurseId = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedByAdminName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
+                    BirthWeight = table.Column<int>(type: "int", nullable: true),
+                    BirthLength = table.Column<int>(type: "int", nullable: true),
+                    NewbornCondition = table.Column<int>(type: "int", nullable: true),
+                    FatherName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SurgicalOperations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SurgicalOperations_AspNetUsers_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SurgicalOperations_AspNetUsers_NurseId",
+                        column: x => x.NurseId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SurgicalOperations_AspNetUsers_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SurgicalOperations_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -373,6 +487,16 @@ namespace MedicalPark.Migrations
                 column: "PatientsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Invoices_DoctorId",
+                table: "Invoices",
+                column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoices_PatientId",
+                table: "Invoices",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MedicalRecords_DoctorId",
                 table: "MedicalRecords",
                 column: "DoctorId");
@@ -397,6 +521,26 @@ namespace MedicalPark.Migrations
                 name: "IX_Prescriptions_PatientID",
                 table: "Prescriptions",
                 column: "PatientID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SurgicalOperations_DoctorId",
+                table: "SurgicalOperations",
+                column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SurgicalOperations_NurseId",
+                table: "SurgicalOperations",
+                column: "NurseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SurgicalOperations_PatientId",
+                table: "SurgicalOperations",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SurgicalOperations_RoomId",
+                table: "SurgicalOperations",
+                column: "RoomId");
         }
 
         /// <inheritdoc />
@@ -421,6 +565,9 @@ namespace MedicalPark.Migrations
                 name: "DoctorPatient");
 
             migrationBuilder.DropTable(
+                name: "Invoices");
+
+            migrationBuilder.DropTable(
                 name: "MedicalRecords");
 
             migrationBuilder.DropTable(
@@ -430,10 +577,16 @@ namespace MedicalPark.Migrations
                 name: "Reports");
 
             migrationBuilder.DropTable(
+                name: "SurgicalOperations");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Appointments");
+
+            migrationBuilder.DropTable(
+                name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

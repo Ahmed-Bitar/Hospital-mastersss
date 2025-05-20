@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MedicalPark.Controllers
 {
+    [ValidateAntiForgeryToken]
+
     [Authorize(Roles = "Doctor,Patient,Admin")]
     public class PrescriptionsController : Controller
     {

@@ -42,6 +42,7 @@ namespace MedicalPark.Models
     public class Patient : ApplicationUser
     {
 
+        public string? HistoryOfIllness { get; set; }
         public int Age { get; set; }
         public string Adres { get; set; }
 
@@ -53,6 +54,7 @@ namespace MedicalPark.Models
         public List<Doctor> Doctors { get; set; }
         public List<Prescription> Prescriptions { get; set; } = new List<Prescription>();
         public List<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public List<SurgicalOperations> SurgicalOperations { get; set; } = new List<SurgicalOperations>();
 
     }
 }

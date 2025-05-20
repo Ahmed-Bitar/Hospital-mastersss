@@ -217,53 +217,6 @@ namespace MedicalPark.Controllers
         }
        
 
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                ApplicationUser user = null;
-
-                user = await _userManager.FindByEmailAsync(model.Email);
-
-                if (user == null)
-                {
-                    user = await _userManager.FindByNameAsync(model.Email);
-                }
-
-                if (user != null)
-                {
-                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
-
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("index", "home");
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Login failed for user {Email}. Reason: {Reason}", model.Email, result.ToString());
-                        ModelState.AddModelError(string.Empty, "Error in login, please check your email address or password.");
-                    }
-                }
-                else
-                {
-                    _logger.LogWarning("Login failed for user {Email}. User not found.", model.Email);
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                }
-            }
-            else
-            {
-                _logger.LogWarning("ModelState is invalid for login attempt of user {Email}.", model.Email);
-            }
-
-            return View(model);
-        }
 
 
         public async Task<IActionResult> Profile()
@@ -290,11 +243,6 @@ namespace MedicalPark.Controllers
 
         
 
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("IndexLoginSigin", "Account");
-        }
+       
     }
 }

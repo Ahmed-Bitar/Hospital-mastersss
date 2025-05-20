@@ -10,6 +10,8 @@ using MedicalPark.Models;
 
 namespace MedicalPark.Controllers
 {
+    [ValidateAntiForgeryToken]
+
     [Authorize(Roles = "Admin,Doctor,Patient")]
     public class AppointmentController : Controller
     {

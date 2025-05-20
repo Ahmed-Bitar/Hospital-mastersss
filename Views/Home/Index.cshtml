@@ -341,7 +341,8 @@
                     </div>
                 </a>
             </div>
-        }@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse"))
+        }
+        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse"))
         {
             <div class="col-md-4 col-sm-6 col-12">
                 <a asp-controller="Reports" asp-action="UserIndex" class="card-box">
@@ -354,6 +355,39 @@
                     </div>
                 </a>
             </div>
+        }
+        @if (User.IsInRole("Admin") || User.IsInRole("Doctor")  || User.IsInRole("Nurse"))
+
+        {
+
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="SurgicalOperations" asp-action="IndexAdmin" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-procedures fa-2x"></i>  
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Surgical Operations</h5>
+                        <p>Manage surgical operations</p>
+                    </div>
+                </a>
+            </div>
+
+        }  @if (User.IsInRole("Patient"))
+
+        {
+
+            <div class="col-md-4 col-sm-6 col-12">
+                <a asp-controller="SurgicalOperations" asp-action="IndexPatient" class="card-box">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-procedures fa-2x"></i>
+                    </div>
+                    <div class="content-wrapper">
+                        <h5>Surgical Operations</h5>
+                        <p>Manage surgical operations</p>
+                    </div>
+                </a>
+            </div>
+
         }
     </div> 
 </div>

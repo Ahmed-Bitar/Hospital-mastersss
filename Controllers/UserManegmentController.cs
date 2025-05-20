@@ -1,27 +1,29 @@
 ﻿using System.Net.Mail;
 using MedicalPark.Dbcontext;
 using MedicalPark.Models;
+using MedicalPark.Servis;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using ServiceStack;
 using static MedicalPark.Models.Doctor;
 
 namespace MedicalPark.Controllers
 {
-    [Authorize(Roles = "Hospital Manager")]
+    [ValidateAntiForgeryToken]
 
+    [Authorize(Roles = "Hospital Manager")]
     public class UserManegmentController : Controller
     {
-        static  private string _email { get; set; }
+        static private string _email { get; set; }
         private readonly EmailVerificationService _emailService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly HospitalDbContext _context;
+        private readonly IDeleteService _deleteService;
         private static readonly TimeSpan CodeValidityDuration = TimeSpan.FromMinutes(1.5);
 
         public UserManegmentController(
@@ -30,7 +32,8 @@ namespace MedicalPark.Controllers
             RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<AccountController> logger,
-            EmailVerificationService mailService)
+            EmailVerificationService mailService,
+            IDeleteService deleteService)
         {
             _context = context;
             _userManager = userManager;
@@ -38,6 +41,7 @@ namespace MedicalPark.Controllers
             _signInManager = signInManager;
             _logger = logger;
             _emailService = mailService;
+            _deleteService = deleteService;
         }
 
         [HttpGet]
@@ -49,42 +53,35 @@ namespace MedicalPark.Controllers
 
             var allUsers = doctors.Concat(nurses).Concat(admins).ToList();
             return View(allUsers);
-
         }
 
         [HttpGet]
         [Authorize(Roles = "Hospital Manager")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var users = await _context.Users.FindAsync(id);
-            if (users == null)
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
             {
-                return NotFound("Users not found.");
+                return NotFound("User not found.");
             }
 
-            return View(users);
+            return View(user);
         }
 
         [HttpPost]
         [Authorize(Roles = "Hospital Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var users = await _context.Users.FindAsync(id);
-            if (users == null)
-            {
-                return NotFound($"Users with ID {id} not found.");
-            }
-
-            _context.Users.Remove(users);
-            await _context.SaveChangesAsync();
+            var result = await _deleteService.DeleteAsync<ApplicationUser>(id);
+            if (!result)
+                return NotFound($"User with ID {id} not found.");
 
             return RedirectToAction("Index", "UserManegment");
-
         }
+
         public IActionResult CreateDoctorAndNurs()
         {
             return View();
         }
-
     }
 }

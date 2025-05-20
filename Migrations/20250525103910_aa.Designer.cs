@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalPark.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    [Migration("20250511053029_aa")]
+    [Migration("20250525103910_aa")]
     partial class aa
     {
         /// <inheritdoc />
@@ -38,6 +38,38 @@ namespace MedicalPark.Migrations
                     b.HasIndex("PatientsId");
 
                     b.ToTable("DoctorPatient");
+                });
+
+            modelBuilder.Entity("Invoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("MedicalPark.Models.ApplicationRole", b =>
@@ -334,6 +366,146 @@ namespace MedicalPark.Migrations
                     b.ToTable("Reports");
                 });
 
+            modelBuilder.Entity("MedicalPark.Models.Room", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ConsultationRoomSection")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DeliveryRoomSection")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmergencyRoomSection")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExaminationRoomSection")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IntensiveCareUnitSection")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSterile")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("OperatingRoomSection")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PatientRoomSection")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecoveryRoomSection")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RoomName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoomType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SterilizationRoomSection")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WaitingRoomSection")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("MedicalPark.Models.SurgicalOperations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CostOfOperation")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedByAdminName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DoctorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("NurseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NurseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PatientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RoomName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SurgeryDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("NurseId");
+
+                    b.HasIndex("PatientId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("SurgicalOperations");
+
+                    b.HasDiscriminator().HasValue("SurgicalOperations");
+
+                    b.UseTphMappingStrategy();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
@@ -454,6 +626,13 @@ namespace MedicalPark.Migrations
                 {
                     b.HasBaseType("MedicalPark.Models.ApplicationUser");
 
+                    b.Property<string>("ConditionJoind")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("JoindedTime")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<int>("PatientID")
                         .HasColumnType("int");
 
@@ -494,11 +673,34 @@ namespace MedicalPark.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("HistoryOfIllness")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MedicalCondition")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Patient");
+                });
+
+            modelBuilder.Entity("BirthRecord", b =>
+                {
+                    b.HasBaseType("MedicalPark.Models.SurgicalOperations");
+
+                    b.Property<int>("BirthLength")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BirthWeight")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FatherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NewbornCondition")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("BirthRecord");
                 });
 
             modelBuilder.Entity("DoctorPatient", b =>
@@ -514,6 +716,25 @@ namespace MedicalPark.Migrations
                         .HasForeignKey("PatientsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Invoice", b =>
+                {
+                    b.HasOne("MedicalPark.Models.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedicalPark.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("MedicalPark.Models.Appointment", b =>
@@ -579,6 +800,41 @@ namespace MedicalPark.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("MedicalPark.Models.SurgicalOperations", b =>
+                {
+                    b.HasOne("MedicalPark.Models.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedicalPark.Models.Nurse", "Nurse")
+                        .WithMany()
+                        .HasForeignKey("NurseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedicalPark.Models.Patient", "Patient")
+                        .WithMany("SurgicalOperations")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedicalPark.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Nurse");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -652,6 +908,8 @@ namespace MedicalPark.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("Prescriptions");
+
+                    b.Navigation("SurgicalOperations");
                 });
 #pragma warning restore 612, 618
         }

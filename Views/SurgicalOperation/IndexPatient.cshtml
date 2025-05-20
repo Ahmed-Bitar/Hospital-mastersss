@@ -1,0 +1,123 @@
+﻿@model IEnumerable<MedicalPark.Models.SurgicalOperation>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Patient | Surgical Operations</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+        background: linear-gradient(135deg, #0D47A1, #1976D2);
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 20px;
+        }
+
+        .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: bold;
+        }
+
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        overflow: hidden;
+        }
+
+        th, td {
+        padding: 12px 15px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+        background: rgba(255, 255, 255, 0.1);
+        font-weight: bold;
+        }
+
+        a.btn {
+        padding: 6px 12px;
+        border-radius: 8px;
+        color: #fff;
+        text-decoration: none;
+        margin: 0 3px;
+        font-size: 14px;
+        display: inline-block;
+        }
+
+        a.btn-primary {
+        background-color: #2196F3;
+        }
+
+        a.btn:hover {
+        opacity: 0.85;
+        }
+
+        .actions {
+        white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-syringe"></i> Surgical Operations</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Operation Name</th>
+                    <th>Start Time</th>
+                    <th>Duration (mins)</th>
+                    <th>Cost</th>
+                    <th>Status</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Nurse</th>
+                    <th>Room</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.OperationStartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@item.DurationInMinutes</td>
+                        <td>$@item.CostOfOperation</td>
+                        <td>@item.Status</td>
+                        <td>@item.PatientName</td>
+                        <td>@item.DoctorName</td>
+                        <td>@item.NurseName</td>
+                        <td>@item.RoomName</td>
+                        <td>@item.Description</td>
+                        @if (User.IsInRole("Patient"))
+                        {
+                            <td class="actions">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+
+                        </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+﻿@model MedicalPark.Models.SurgicalOperation
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Operation Details</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #001f3f, #005f99);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+            .field strong {
+                display: inline-block;
+                width: 150px;
+                font-weight: 600;
+            }
+
+        a.btn-back {
+            display: inline-block;
+            margin-top: 25px;
+            background: #00bfff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+            a.btn-back:hover {
+                background: #008fc7;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fa-solid fa-info-circle"></i> Operation Details</h1>
+
+        <div class="field"><strong>Name:</strong> @Model.Name</div>
+        <div class="field"><strong>Date:</strong> @Model.SurgeryDate.ToString("yyyy-MM-dd")</div>
+        <div class="field"><strong>Description:</strong> @Model.Description</div>
+        <div class="field"><strong>Cost:</strong> @Model.CostOfOperation.ToString("C")</div>
+        <div class="field"><strong>Patient:</strong> @Model.PatientName</div>
+        <div class="field"><strong>Doctor:</strong> @Model.DoctorName</div>
+        <div class="field"><strong>Nurse:</strong> @Model.NurseName</div>
+        <div class="field"><strong>Room:</strong> @Model.RoomName</div>
+        <div class="field"><strong>Status:</strong> @Model.Status</div>
+
+        <a href="@Url.Action("IndexAdmin")" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back to list</a>
+    </div>
+</body>
+</html>

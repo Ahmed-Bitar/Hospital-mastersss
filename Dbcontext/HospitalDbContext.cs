@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using System.Security.Cryptography;
 using MedicalPark.Models;
+using System.Linq;
 
 namespace MedicalPark.Dbcontext
 {
@@ -14,10 +12,6 @@ namespace MedicalPark.Dbcontext
         {
         }
 
-
-
-
-    
         public DbSet<Report> Reports { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
@@ -27,10 +21,20 @@ namespace MedicalPark.Dbcontext
         public DbSet<Nurse> Nurses { get; set; }
         public DbSet<Admin> Managements { get; set; }
         public DbSet<ApplicationUser> Users { get; set; }
+        public DbSet<SurgicalOperation> SurgicalOperation { get; set; }
+        public DbSet<BirthRecord> BirthRecords { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<PatientConditionAfterSurgery> PatientConditionAfterSurgerys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApplicationUser>().HasQueryFilter(u => !u.IsDeleted);
+            modelBuilder.Entity<Doctor>().HasQueryFilter(d => !d.IsDeleted);
+            modelBuilder.Entity<Patient>().HasQueryFilter(p => !p.IsDeleted);
+            modelBuilder.Entity<Nurse>().HasQueryFilter(n => !n.IsDeleted);
+            modelBuilder.Entity<Room>().HasQueryFilter(u => !u.IsAvailable);
+
             modelBuilder.Entity<Appointment>().HasQueryFilter(a => !a.Doctor.IsDeleted && !a.Patient.IsDeleted);
             modelBuilder.Entity<MedicalRecord>().HasQueryFilter(m => !m.Patient.IsDeleted);
             modelBuilder.Entity<Prescription>().HasQueryFilter(p => !p.Doctor.IsDeleted && !p.Patient.IsDeleted);
@@ -59,145 +63,20 @@ namespace MedicalPark.Dbcontext
                 .HasForeignKey(a => a.PatientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
             modelBuilder.Entity<MedicalRecord>()
                 .HasOne(m => m.Patient)
                 .WithMany()
                 .HasForeignKey(m => m.PatientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
-
-
-
             base.OnModelCreating(modelBuilder);
         }
-        public async Task SeedManagerRoleAndUser(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            var role = await roleManager.FindByNameAsync("Hospital Manager");
-            if (role == null)
-            {
-                role = new ApplicationRole("Hospital Manager");
-                await roleManager.CreateAsync(role);
-            }
 
-            var user = await userManager.FindByEmailAsync("ahmad.bitar@gmail.com");
-            if (user == null)
-            {
-                user = new ApplicationUser
-                {
-                    UserName = "ahmadbitar",
-                    Gender="Male",
-                    Name = "Ahmad Bitar",
-                    Email = "ahmad.w.bitar@gmail.com",
-                    PhoneNumber = "123456789",
-                    UserType = "Hospital Manager",
-                };
-                string Password = "Ahmad@ab12";
-                var result = await userManager.CreateAsync(user, Password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Hospital Manager");
-                }
-            }
-        }
-      
-        public async Task DoctorRole(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            var role = await roleManager.FindByNameAsync("Doctor");
-            if (role == null)
-            {
-                role = new ApplicationRole("Doctor");
-                await roleManager.CreateAsync(role);
-            }
-
-            var user = await userManager.FindByEmailAsync("Doctor@gmail.comm");
-            if (user == null)
-            {
-                user = new Doctor
-                {
-                    UserName = "Doctor",
-                    Gender = "Male",
-                    Name = "Doctor",
-                    Email = "Doctor@gmail.com",
-                    PhoneNumber = "123456789",
-                    UserType = " Doctor",
-
-
-
-                };
-                string Password = "Ahmad@ab12";
-                var result = await userManager.CreateAsync(user, Password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Doctor");
-                }
-            }
-        }
-      
-        public async Task AdminRole(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            var role = await roleManager.FindByNameAsync("Admin");
-            if (role == null)
-            {
-                role = new ApplicationRole("Admin");
-                await roleManager.CreateAsync(role);
-            }
-
-            var user = await userManager.FindByEmailAsync("bitar@gmail.comm");
-            if (user == null)
-            {
-                user = new Admin
-                {
-                    UserName = "Admin",
-                    Gender = "Male",
-                    Name = "Admin",
-                    Email = "Admin@gmail.com",
-                    PhoneNumber = "123456789",
-                    UserType = " Admin",
-                };
-                string Password = "Ahmad@ab12";
-                var result = await userManager.CreateAsync(user, Password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Admin");
-                }
-            }
-        }
-
-        public async Task NurseRole(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
-        {
-            var role = await roleManager.FindByNameAsync("Nurse");
-            if (role == null)
-            {
-                role = new ApplicationRole("Nurse");
-                await roleManager.CreateAsync(role);
-            }
-
-            var user = await userManager.FindByEmailAsync("Nurse@gmail.comm");
-            if (user == null)
-            {
-                user = new Nurse
-                {
-                    UserName = "Nurse",
-                    Gender = "Male",
-                    Name = "Nurse",
-                    Email = "Nurse@gmail.com",
-                    PhoneNumber = "123456789",
-                    UserType = " Nurse",
-                };
-                string Password = "Ahmad@ab12";
-                var result = await userManager.CreateAsync(user, Password);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "Nurse");
-                }
-            }
-        }
         public override int SaveChanges()
         {
             foreach (var entry in ChangeTracker.Entries()
-                .Where(e => e.State == EntityState.Deleted && e.Entity is Doctor))
+                .Where(e => e.State == EntityState.Deleted &&
+                           (e.Entity is ApplicationUser ||e.Entity is SurgicalOperation)))
             {
                 entry.State = EntityState.Modified;
                 entry.CurrentValues["IsDeleted"] = true;

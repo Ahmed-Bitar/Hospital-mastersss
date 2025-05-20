@@ -1,72 +1,54 @@
 ﻿using MedicalPark.Dbcontext;
 using MedicalPark.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<HospitalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = true;
-    options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 1;
-    options.SignIn.RequireConfirmedAccount = false;
-})
-.AddEntityFrameworkStores<HospitalDbContext>()
-.AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+    .AddEntityFrameworkStores<HospitalDbContext>()
+    .AddDefaultTokenProviders();
 
-builder.Services.AddSession(options =>
+builder.Services.AddAuthentication(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(120);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
 });
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<EmailVerificationService>();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-    var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
-    var context = services.GetRequiredService<HospitalDbContext>();
-
-    await context.SeedManagerRoleAndUser(roleManager, userManager);
-    await context.DoctorRole(roleManager, userManager);
-
-    await context.AdminRole(roleManager, userManager);
-    await context.NurseRole(roleManager, userManager);
-
-}
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-else
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseSession();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=IndexLoginSigin}/{id?}");

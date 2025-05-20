@@ -13,6 +13,8 @@ using static MedicalPark.Models.Doctor;
 
 namespace MedicalPark.Controllers
 {
+    [ValidateAntiForgeryToken]
+
     [Authorize(Roles = "Hospital Manager")]
 
     public class ManegmentDoctorController : Controller

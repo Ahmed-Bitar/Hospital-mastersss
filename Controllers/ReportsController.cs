@@ -10,6 +10,7 @@ namespace MedicalPark.Controllers
 {
     [Authorize(Roles = "Admin,Patient,Nurse,Doctor,Hospital Manager")]
 
+    [ValidateAntiForgeryToken]
 
     public class ReportsController : Controller
     {

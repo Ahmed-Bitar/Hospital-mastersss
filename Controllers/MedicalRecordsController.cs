@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace MedicalPark.Controllers
 {
     [Authorize(Roles = "Admin,Doctor,Nurse,Patient ")]
+    [ValidateAntiForgeryToken]
 
     public class MedicalRecordsController : Controller
     {

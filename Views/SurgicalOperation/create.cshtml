@@ -1,0 +1,173 @@
+﻿@model MedicalPark.Models.SurgicalOperation
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Create Surgical Operation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #001f3f, #005f99);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+            input::placeholder,
+            textarea::placeholder {
+                color: #ccc;
+            }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            background: #00bfff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            transition: background 0.3s ease;
+        }
+
+            .btn:hover {
+                background: #008fc7;
+            }
+
+        .validation-summary-errors {
+            background: #ff4c4c;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+    </style>
+
+<h1>Create Surgical Operation</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Operation Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="OperationStartTime">Start Time</label>
+        <input asp-for="OperationStartTime" type="datetime-local" class="form-control" 
+               value="@(ViewBag.DefaultStart.ToString("yyyy-MM-ddTHH:mm"))" />
+        <span asp-validation-for="OperationStartTime" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DurationInMinutes">Duration (minutes)</label>
+        <input asp-for="DurationInMinutes" class="form-control" />
+        <span asp-validation-for="DurationInMinutes" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CostOfOperation">Cost</label>
+        <input asp-for="CostOfOperation" class="form-control" />
+        <span asp-validation-for="CostOfOperation" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PatientId">Patient</label>
+        <select asp-for="PatientId" asp-items="ViewBag.Patients" class="form-control">
+            <option value="">-- Select Patient --</option>
+        </select>
+        <span asp-validation-for="PatientId" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DoctorId">Doctor</label>
+        <select asp-for="DoctorId" asp-items="ViewBag.Doctors" class="form-control">
+            <option value="">-- Select Doctor --</option>
+        </select>
+        <span asp-validation-for="DoctorId" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NurseId">Nurse</label>
+        <select asp-for="NurseId" asp-items="ViewBag.Nurses" class="form-control">
+            <option value="">-- Select Nurse --</option>
+        </select>
+        <span asp-validation-for="NurseId" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="RoomId">Room</label>
+        <select asp-for="RoomId" asp-items="ViewBag.Rooms" class="form-control">
+            <option value="">-- Select Room --</option>
+        </select>
+        <span asp-validation-for="RoomId" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status">Status</label>
+        <select asp-for="Status" class="form-control"
+                asp-items="Html.GetEnumSelectList<MedicalPark.Models.SurgeryStatus>()">
+            <option value="">-- Select Status --</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="IndexAdmin" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+

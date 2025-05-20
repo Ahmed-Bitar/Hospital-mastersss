@@ -1,0 +1,132 @@
+﻿@model IEnumerable<MedicalPark.Models.SurgicalOperation>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Admin | Surgical Operations</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #001f3f, #005f99);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        th {
+            background: rgba(255,255,255,0.1);
+        }
+
+        a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #0066cc;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-right: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #004080;
+        }
+
+        .icon {
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1><i class="fas fa-syringe"></i> Surgical Operations</h1>
+
+    <div style="text-align: right; margin-bottom: 20px;">
+        <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Create New</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Operation Name</th>
+                <th>Start Time</th>
+                <th>Duration (mins)</th>
+                <th>Cost</th>
+                <th>Status</th>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Nurse</th>
+                <th>Room</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.OperationStartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@item.DurationInMinutes</td>
+                    <td>$@item.CostOfOperation</td>
+                    <td>@item.Status</td>
+                    <td>@item.PatientName</td>
+                    <td>@item.DoctorName</td>
+                    <td>@item.NurseName</td>
+                    <td>@item.RoomName</td>
+                    <td>@item.Description</td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary"><i class="fas fa-edit"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                        }
+                        else if (User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                        {
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
