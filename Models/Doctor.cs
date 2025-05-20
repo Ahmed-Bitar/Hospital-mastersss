@@ -32,6 +32,8 @@
         public int Salery { get; set; }
         public int PatientID { get; set; }
 
+        public string ConditionJoind { get; set; }
+        public DateTimeOffset JoindedTime{ get; set; }
         public List<Patient> Patients { get; set; } = [];
         public List<Appointment> Appointments { get; set; } = [];
         public List<MedicalRecord> MedicalRecords { get; set; } = [];

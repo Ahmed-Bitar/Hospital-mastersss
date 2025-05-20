@@ -163,6 +163,8 @@ namespace MedicalPark.Controllers
                     Specialty = model.Specialty,
                     Salery = model.Salery,
                     UserType = model.UserType,
+                    JoindedTime = DateTimeOffset.UtcNow,
+                    ConditionJoind = "New Doctor",
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -243,6 +245,7 @@ namespace MedicalPark.Controllers
                 doctor.PhoneNumber = EditeDoctor.PhoneNumber;
                 doctor.UserType = "Doctor";
 
+
                 _context.Update(doctor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "UserManegment");
@@ -250,8 +253,21 @@ namespace MedicalPark.Controllers
             }
             return View(EditeDoctor);
         }
+        [HttpPost]
+        [Authorize(Roles = "Hospital Manager")]
 
-      
+        public async Task<IActionResult> ExecuteUpdateAsync() 
+        {
+            await _context.Doctors
+            .Where(b => b.JoindedTime < DateTimeOffset.UtcNow)
+            .ExecuteUpdateAsync(setters => setters
+            .SetProperty(b => b.ConditionJoind,"Oldest"));
+
+
+            return RedirectToAction("Index", "UserManegment");
+
+
+        }
 
 
 
